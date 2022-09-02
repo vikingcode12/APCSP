@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./csss.css">
+    <script defer src="./js.js"></script>
+    <title>The Pho Down Low</title>
+</head>
+<body>
+    <h1>The Pho Down Low</h1>
+    <h2>Lunch Menu</h2>
+    <P>Pick an appetizer, main course, and beverage</P>
+    <br>
+    Appetizer
+    <select name="" id="idAppetizer">
+        <option value="none">None, Price: N/A</option>
+        <option value="app1">Spring Rolls, Price: $5.00</option>
+        <option value="app2">Fried Tofu, Price: $5.50</option>
+        <option value="app4">Pot Stickers, Price: $6.00</option>
+    </select>
+     <div><img id="idAppPic" src="images/appOne.jpg" width="150" height="100"></div> <br>
+     Main Course:
+     <select name="" id="idMainCourse">
+         <option value="none"> None Price: N/A</option>
+         <option value="main1"> Vegan Pho, Price: 414.00</option>
+         <option value="main2"> Beef Pho, Price: $15.00</option>
+         <option value="main3"> Bun Noodle Bowl (Shrimp), Price: $16.00</option>
+    </select>
+    <div><img id="idMainPic" src="images/mainOne.jpg" width="150" height="100"></div> <br>
+    Beverage:
+    <select id="idBeverage">
+        <option value="none"> None Price: N/A</option>
+        <option value="bev1"> Coffee w/ Milk, Price: $4.25</option>
+        <option value="bev2"> Thai Iced Tea, Price: $5.25</option>
+        <option value="bev3"> Mango Boba, Price: $6.25</option>
+    </select>
+    <div><img id="idBevPic" src="images/bevOne.jpg" width="150" height="100"></div> <br>
+    
+    Name: <input type="text" id="idName" placeholder="Full Name">
+    Phone Number: <input type="text" id="idName" placeholder="Phone Number">
+    <br><br>
+    Would you like text alerts for your order? <input type="checkbox" id="idCheck">
+    <br><br>
+    Tip %: <input type="text" id="idTip" placeholder="Positive % from 0-100" size="58">
+    <br><br>
+    <button onclick="submitOrder();">Submit Order</button>
+    <div id="idOrderSummary"></div>
+    <br>
+</body>
+</html>
