@@ -20,11 +20,15 @@ function changeImage(th) {
     //img2: Thai Iced Tea, https://www.yummly.com/recipe/Thai-Iced-Tea-1495744  
     //img3: Mango Boba, https://www.yummly.co.uk/recipes/tapioca-drinks 
     bevPicArray = ['./images/bevOne.jpg', './images/bevTwo.jpg', './images/bevThree.jpg']
+    //Get the last index of the string
     var num = Number(th.value[th.value.length - 1] - 1)
-    console.log(num)
+    //Check which image needs to be changed
     if(th.id == 'idAppetizer') {
-        if(isNaN(num)) return idAppPic.src = './images/selectpls.jpg'
+        //Check if the last index is a number
+        if(isNaN(num)) return idAppPic.src = './images/selectpls.jpg' //Since its not a number we display no item has been selected
+        //Since the last index is a number we display the coresponding image to their order
         idAppPic.src = appPicArray[num]
+        //Change the seleted item to corespond to their order
         selectedApp = th.id.value;
     }
     else if(th.id == 'idMainCourse') {
