@@ -4,8 +4,9 @@ var selectedBev;
 var selectedAppPrice = 0;
 var selectedMainPrice = 0;
 var selectedBevPrice = 0;
+var tip = 0;
 
-//On reload the selected doesn't change so the image must match
+//On reload the selected option doesn't change sometimes so the image must match
 window.onload = e => {
     changeImage(idAppetizer)
     changeImage(idMainCourse)
@@ -14,18 +15,22 @@ window.onload = e => {
 
 function submitOrder() {
     //If no items were ordered don't do anything
-    if(calcSubTotal() == "No items ordered") return idOrderSummary.innerHTML = "No items ordered";
-    var output = '<h2> Your order has been submitted </h2>';
-    output += `Name: ${idName.value}`;
+    if(calcSubTotal() == "No items ordered") return idOrderSummary.innerHTML = "<h1>No items ordered.";
+    else if(!idName.value) return idOrderSummary.innerHTML = "Please enter a name.";
+    else if(!idPhone.value) return idOrderSummary.innerHTML = "Please enter a phone number.";
+    var output = '<l> Submitted </l>';
+    output += `<br> Name: ${idName.value}`;
     output += `<br> Phone Number: ${idPhone.value}`;
-    if(idCheck.checked) output += "<br> You will recieve a text notification when your order is ready."
-    else output += "<br> You will not receive text notifications. <br> Orders are typically finished in 30 minutes."
     output += `<br> Appetizer: ${formatUSD(selectedAppPrice)}`
     output += `<br> Main Dish: ${formatUSD(selectedMainPrice)}`
     output += `<br> Beverage: ${formatUSD(selectedBevPrice)}`
+    output += `<br> Tip: ${formatUSD(tip)}`
     output += `<br> Sub Total: ${calcSubTotal()}`
     output += `<br> Total Amount: ${calcTotal()}`
-    output += "<br> Please pay in-store."
+    if(idCheck.checked) output += "<h2>You will recieve a text notification when your order is ready. </h2>"
+    else output += "<h2> You will not receive text notifications. <br> Orders are typically finished in 30 minutes."
+    output += "<br> Please pay in-store.</h2>"
+    
 
 
     
@@ -54,6 +59,7 @@ function changeImage(th) {
         //Grab the price of the selected item
         selectedAppPrice = parseFloat(th.options[th.selectedIndex].attributes.price.value)
         //Check if the last index is a number
+        //Image is custom made by me no need for credit
         if(isNaN(num)) return idAppPic.src = './images/selectpls.jpg' //Since its not a number we display no item has been selected
         //Since the last index is a number we display the coresponding image to their order
         idAppPic.src = appPicArray[num]
@@ -77,9 +83,9 @@ function calcSubTotal() {
     if(selectedAppPrice + selectedMainPrice + selectedBevPrice == 0) return "No items ordered"
     let subtnotip = selectedAppPrice + selectedMainPrice + selectedBevPrice
     //Calculate the tip
-    if(idTip.value) var tip = idTip.value/100 * subtnotip;
+    if(idTip.value) tip = idTip.value/100 * subtnotip;
     //If no tip given then tip is 0
-    else var tip = 0;
+    else tip = 0;
     //Display subtotal before tax
     return formatUSD((subtnotip + tip).toFixed(2));
 }
@@ -89,9 +95,7 @@ function calcTotal() {
     //Get the subtotal
     var subt = selectedAppPrice + selectedMainPrice + selectedBevPrice;
     var tax = Number(subt * taxRate).toFixed(2)
-    //Get tip
-    if(idTip.value) var tip = idTip.value/100 * subt;
-    else var tip = 0;
+    //Return Total
     return formatUSD((Number(subt) + Number(tax) + Number(tip)).toFixed(2))
 }
 
