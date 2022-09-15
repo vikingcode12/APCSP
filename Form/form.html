@@ -15,19 +15,39 @@
     <img src="./internet.jpg" width="450" height="250">
     <h2>Basic Info</h2>
     
-    <iptlbl>First Name:</iptlbl> <br><input type="text" placeholder="First Name">
+    <iptlbl>First Name:</iptlbl> <br><input type="text" id="idfName" placeholder="First Name">
     <br>
-    <iptlbl>Last Name:</iptlbl> <br> <input type="text" placeholder="Last Name">
+    <iptlbl>Last Name:</iptlbl> <br> <input type="text" id="idlName" placeholder="Last Name">
     <br>
-    <iptlbl>Year You First Accessed The Internet:</iptlbl> <br><input type="text" placeholder="Year">
+    <iptlbl>Year You First Accessed The Internet:</iptlbl> <br><input id="idYear" type="text" placeholder="Year">
     
     <h2>Internet Questions</h2>
-    <textarea cols="30" rows="10"></textarea>
-    <!-- Insert textarea tag here for first internet experience -->
-    <!-- Insert appropriate checkboxes here -->
+    <textarea id="idInteraction" placeholder="Briefly describe your first interaction with the internet." cols="30" rows="10"></textarea>
+    <br>
+    <h2>Which of the following has the intenet made possible and/or easier</h2>
+    <input type="checkbox" id="idFamComms"> Keeping in touch with family and/or friends
+    <br>
+    <input type="checkbox" id="idOrgComms"> Organizing parties, dinners, or events
+    <br>
+    <input type="checkbox" id="idResearch"> Researching information on a particular topic
+    <br>
+    <input type="checkbox" id="idNews"> Following current events
+    <br>
+    <input type="checkbox" id="idCallComms"> Make a phone call (from work, home, hotel, or public place)
+    <br>
+    <input type="checkbox" id="idEntertainment"> Watching a movie
+    <br>
+    <input type="checkbox" id="idFinance"> Keeping track of finances
+    <br>
+    <input type="checkbox" id="idShop"> Shopping for goods and services
+    <br>
+    <input type="checkbox" onclick="otherText(this)" id="idOther"> Other
+    <input type="text" placeholder="Please explain" hidden id="idOtherText">
+    <br>
+    <br>
 
-    <!-- Insert submit button here -->
-    <!-- Insert empty div tag here -->
+    <div id="results"></div>
+   <button class="btn" onclick="submit()">Submit</button><br>
     
 </body>
 </html>
