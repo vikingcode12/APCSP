@@ -4,7 +4,8 @@ function submit() {
     //Grab all the values
     var fName = idfName.value
     var lName = idlName.value
-    var year = new Date().getFullYear() - idYear.value
+    var yearsUsed = new Date().getFullYear() - idYear.value
+    var year = idYear.value
     var interaction = idInteraction.value
     var familyCommunication = idFamComms.checked
     var orgCommunication = idOrgComms.checked
@@ -30,15 +31,15 @@ function submit() {
     else if (count > 5) impact = "<high>High</high>"
 
     //Display image based on years
-    if(year < 10) idImg.src = "./DNS.jpg"
-    else if(year < 20) idImg.src = "./2011.jpg"
-    else if(year < 30) idImg.src = "./DIALUP.jpg"
-    else if(year >= 30) idImg.src = './ARPANET.jpg'
+    if(yearsUsed < 10) idImg.src = "./DNS.jpg"
+    else if(yearsUsed < 20) idImg.src = "./2011.jpg"
+    else if(yearsUsed < 30) idImg.src = "./DIALUP.jpg"
+    else if(yearsUsed >= 30) idImg.src = './ARPANET.jpg'
     
     //Output survey result
     var output = `<ans>Thank You ${fName + ' ' + lName} <br> 
     You first accessed the internet in: ${year} <br>
-    You have used the intenet for: ${year} years <br>
+    You have used the intenet for: ${yearsUsed} years <br>
     Your response is: ${wordCount(interaction)} words long <br>
     You checked: ${count} options <br>
     The impact of the internet on your life is: ${impact} </ans>`
