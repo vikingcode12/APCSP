@@ -4,15 +4,18 @@
     <title>
 		Dawn Of The Internet Form
 	</title>
+    <link rel="icon" href="./favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="./masterCSS.css">
     <script defer src="./formJS.js"></script>
 </head>
-<body>
+<body id="idBody">
     <h1>Dawn Of The Internet Form</h1>
     <p> This is a survey for you to give to an adult in your family to observe how much of an impact the internet has had on them </p>
     <!-- Image of the internet -->
     <!-- From https://www.internetsociety.org/wp-content/uploads/2022/04/Internet-of-Things-IoT-1280px.jpg -->
-    <img src="./internet.jpg" width="450" height="250">
+    <!-- Rick Astley -->
+    <!-- From https://www.giantfreakinrobot.com/ent/rick-astley-remake-never-gonna-give-you-up.html -->
+    <img id="idImg" src="./internet.jpg" onmouseover="img = this.src; this.src = './rick.jpg'" onmouseout="this.src = img" width="450" height="250">
     <h2>Basic Info</h2>
     
     <iptlbl>First Name:</iptlbl> <br><input type="text" id="idfName" placeholder="First Name">
@@ -42,12 +45,15 @@
     <input type="checkbox" id="idShop"> Shopping for goods and services
     <br>
     <input type="checkbox" onclick="otherText(this)" id="idOther"> Other
-    <input type="text" placeholder="Please explain" hidden id="idOtherText">
+    <br>
+    <textarea type="text" placeholder="Please explain" hidden id="idOtherText"> </textarea>
     <br>
     <br>
 
     <div id="results"></div>
    <button class="btn" onclick="submit()">Submit</button><br>
+   <button class="hidden" onclick="window.open('https\://www.youtube.com/watch?v=dQw4w9WgXcQ')">Click For Surprise</button>
+   <p></p>
     
 </body>
 </html>
