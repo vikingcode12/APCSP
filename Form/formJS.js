@@ -53,6 +53,9 @@ function wordCount(str) {
 }
 
 function otherText(other) {
-    if(other.checked) idOtherText.hidden = false
+    if(other.checked) {
+        idOtherText.hidden = false
+        idOtherText.value = "Please Explain."
+    }
     else idOtherText.hidden = true
 }
