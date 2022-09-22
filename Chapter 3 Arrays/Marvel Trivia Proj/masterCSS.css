@@ -187,5 +187,5 @@ body{
     border: 5px solid white;
     text-align: center;
     background: rgb(2, 0, 36);
-    background: linear-gradient(90deg, rgba(121, 9, 9, 1) 0%);
+    background: linear-gradient(90deg, rgba(121, 9, 9, 1) 0%, rgba);
 }
