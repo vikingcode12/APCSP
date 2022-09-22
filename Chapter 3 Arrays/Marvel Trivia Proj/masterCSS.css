@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Noto+Sans&display=swap');
+/* @import url('https://fonts.googleapis.com/css?family=Noto+Sans&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Caveat&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Rubik:700&display=swap');
 
@@ -136,17 +136,6 @@ low{
     height: 100%;
 }
 
-/* .hidden::after{
-    background: transparent;
-    color: transparent;
-    content: "";
-    width: 100%;
-    height: 100%;
-    inset: 0;
-    border-radius: 10px;
-    position: absolute;
-} */
-
 
 .hidden:hover{
     margin: auto;
@@ -191,4 +180,12 @@ low{
 
 .btn:active::after{
     box-shadow: none; 
+} */
+
+body{
+    padding: 10px, 0;
+    border: 5px solid white;
+    text-align: center;
+    background: rgb(2, 0, 36);
+    background: linear-gradient(90deg, rgba(121, 9, 9, 1) 0%);
 }
