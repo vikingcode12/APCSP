@@ -51,7 +51,7 @@ textarea{
     margin-bottom: 15px;
     font-family: Noto Sans;
 }
-
+*/
 .btn{
     margin: auto;
     margin-top: 50px;
@@ -110,7 +110,7 @@ textarea{
     box-shadow: none; 
 }
 
-ans{ 
+/* ans{ 
     font-size: 1.1rem;
     line-height: 3vh;
 }
@@ -180,12 +180,18 @@ low{
 
 .btn:active::after{
     box-shadow: none; 
-} */
+} */ 
 
 body{
     padding: 10px, 0;
     border: 5px solid white;
     text-align: center;
     background: rgb(2, 0, 36);
-    background: linear-gradient(90deg, rgba(121, 9, 9, 1) 0%, rgba);
+    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(121, 9, 9, 1) 44%, rgba(0, 212,255,1) 100%);
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: white;
+}
+
+p{
+    font-style: italic;
 }

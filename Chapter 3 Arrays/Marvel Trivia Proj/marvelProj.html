@@ -1,10 +1,19 @@
+<!DOCTYPE html>
 <html>
     <head>
         <title>Marvel Trivia</title>
         <link rel="stylesheet" href="./masterCSS.css">
-        <script src="./marvelJS.js" defer></script>
+        <script src="./marvelJS.js" defer ></script>
     </head>
     <body>
-
+        <h1>Marvel Movie Quiz</h1>
+        <div id="idDivPic"></div>
+        <div id="idDivQuestion"></div>
+        <input type="text" placeholder="Type answer here" id="idTxtAns">
+        <button onclick="checkAnswer()">Check</button>
+        <button onclick="displayRandomQuestion()">Next</button>
+        <button onclick="viewAnswerKey()">Answer Key</button>
+        <div id="idDivAnswerBreak"></div>
+        <div id="idDivFullAnswerKey"></div>
     </body>
 </html>
