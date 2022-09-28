@@ -7,12 +7,15 @@
     </head>
     <body>
         <h1>Marvel Movie Quiz</h1>
+        <score id="idScore">Score: 0</score>
+        <br><br>
         <div id="idDivPic"></div>
         <div id="idDivQuestion"></div>
         <input type="text" placeholder="Type answer here" id="idTxtAns">
-        <button onclick="checkAnswer()">Check</button>
+        <button onclick="checkAnswer(idTxtAns.value)">Check</button>
         <button onclick="displayRandomQuestion()">Next</button>
         <button onclick="viewAnswerKey()">Answer Key</button>
+        <button onclick="startOver()">Start Over</button>
         <div id="idDivAnswerBreak"></div>
         <div id="idDivFullAnswerKey"></div>
     </body>

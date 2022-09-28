@@ -1,3 +1,5 @@
+//THIS JS FORCES THE USER TO ANSWER THE QUESTIONS, HOWEVER THIS SEEMED TO BE ANTI-USER FRIENDLY SO IT WAS SCRAPPED
+
 // Image Citations:
 // Black Panther: https://www.amazon.com/PosterOffice-Black-Panther-Movie-Poster/dp/B079Z2DNDR/ref=asc_df_B079Z2DNDR/?tag=hyprod-20&linkCode=df0&hvadid=309837868223&hvpos=&hvnetw=g&hvrand=9639389235403603581&hvpone=&hvptwo=&hvqmt=&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=9021735&hvtargid=pla-568496468627&psc=1&tag=&ref=&adgrpid=64520921227&hvpone=&hvptwo=&hvadid=309837868223&hvpos=&hvnetw=g&hvrand=9639389235403603581&hvqmt=&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=9021735&hvtargid=pla-568496468627
 // Black Widow: https://www.amazon.com/Black-Widow-Movie-Poster-Authenticity/dp/B08B4CFVTJ
@@ -13,11 +15,16 @@ var questionNum;
 var score = 0;
 var rounds = -1;
 const TOTAL_ROUNDS = 20;
+var answered = true;
 // var questionArray = []
 
 window.onload = () => {
     displayRandomQuestion();
     //formatQuestion();
+}
+
+function checkAnswer() {
+
 }
 
 // function displayRandomQuestion() {
@@ -38,8 +45,10 @@ window.onload = () => {
 // }
         
 function displayRandomQuestion() {
-    rounds
+    if(!answered) return alert("Please provide a response and check it.")
+    rounds++
     if(rounds > TOTAL_ROUNDS) return idDivAnswerBreak.innerHTML = `<h2>Trivia Complete! Your score was ${score}/20. <br> Please press start over.</h2>`
+    answered = false;
     //Get a random question number
     var i = getRandomInt(0, movieArray.length-1)
     //Prevent Getting The Same Question Twice
@@ -67,6 +76,7 @@ function formatQuestion(a, i) {
 }
 
 function checkAnswer(ans) {
+    answered = true;
     //Remove the spaces
     ans = Number(removeSpaces(ans))
     //Ensure that the answer is valid
