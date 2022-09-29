@@ -12,8 +12,8 @@
         <div id="idDivPic"></div>
         <div id="idDivQuestion"></div>
         <input type="text" placeholder="Type answer here" id="idTxtAns">
-        <button onclick="checkAnswer(idTxtAns.value)">Check</button>
-        <button onclick="displayRandomQuestion()">Next</button>
+        <button id="idCheckAns" onclick="checkAnswer(idTxtAns.value)">Check</button>
+        <button onclick="displayRandomQuestion()" id="idNext">Next</button>
         <button onclick="viewAnswerKey()">Answer Key</button>
         <button onclick="startOver()">Start Over</button>
         <div id="idDivAnswerBreak"></div>

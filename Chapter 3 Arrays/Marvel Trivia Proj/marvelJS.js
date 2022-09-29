@@ -12,13 +12,21 @@ var yearArray = [2018, 2021, 2011, 2019, 2014, 2021, 2021]
 var questionNum;
 var score = 0;
 var rounds = -1;
+var answered = false;
 const TOTAL_ROUNDS = 20;
 // var questionArray = []
+
+idTxtAns.onkeydown = (e) => {
+    if(e.key != "Enter") return;
+    if(answered) return idNext.click();
+    idCheckAns.click();
+}
 
 window.onload = () => {
     displayRandomQuestion();
     //formatQuestion();
 }
+
 
 // function displayRandomQuestion() {
 //     var i = getRandomInt(questionArray.length-1)
@@ -38,8 +46,9 @@ window.onload = () => {
 // }
         
 function displayRandomQuestion() {
-    rounds
+    rounds++
     if(rounds > TOTAL_ROUNDS) return idDivAnswerBreak.innerHTML = `<h2>Trivia Complete! Your score was ${score}/20. <br> Please press start over.</h2>`
+    answered = false;
     //Get a random question number
     var i = getRandomInt(0, movieArray.length-1)
     //Prevent Getting The Same Question Twice
@@ -67,6 +76,7 @@ function formatQuestion(a, i) {
 }
 
 function checkAnswer(ans) {
+    answered = true;
     //Remove the spaces
     ans = Number(removeSpaces(ans))
     //Ensure that the answer is valid
@@ -115,6 +125,7 @@ function removeSpaces(str) {
 function startOver() {
     score = 0;
     rounds = 0;
+    answered = false;
     idScore.innerHTML = `Score: ${score}`
     displayRandomQuestion();
     alert("Resetting the trivia...")
