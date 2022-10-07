@@ -68,44 +68,57 @@ score = 0;
         
 		// write a function that check for a winner
         function checkWin() {
-            if (score < 10) return false
-            gameState = -1;
-            idGameMsgs.innerHTML = "Congratulations You Win! <br> Press Start New Game to start a new game."
-            return true;
+            if(gameState != 0) return;
+            if (p1Deck.length < 1){
+                idGameMsgs.innerHTML = "Congratulations Player 2 Wins! <br> Press Start New Game to start a new game."
+                return true
+            }
+            else if (p2Deck.length > 0) return false
+                gameState = -1;
+                idGameMsgs.innerHTML = "Congratulations Player 1 Win! <br> Press Start New Game to start a new game."
+                return false
         }
         
 		// write a checkMatch(event) function
         function checkMatch(e) {
             if(checkWin()) return
             else if(gameState != 0 && gameState != .5) return
-            if(gameState == .5 && e.keyCode == 32){
+            else if(gameState == .5 && e.code == "Space"){
                 idGameMsgs.innerHTML = 'Match or Pass?'
                 gameState = 0;
                 return dealCards();
             }
             else if (gameState == .5) return
-            if(e.keyCode == 89 && p1CurrCard == p2CurrCard) {
+            if(e.code == "KeyA" && p1CurrCard == p2CurrCard) {
                 score++
-                idGameMsgs.innerHTML = "Nice Job!"
+                idGameMsgs.innerHTML = "Nice Job Player 1! You Claim Player 2's Card!"
+                p1Deck.push(p2CurrCard);
+                p2Deck.splice(p2Index, 1)
                 gameState = .5;
             }
-            else if(e.keyCode == 89) {
+            else if(e.code == "KeyA") {
                 score--
-                idGameMsgs.innerHTML = "Oops That's Not Right!"
+                p2Deck.push(p1CurrCard);
+                p1Deck.splice(p1Index, 1)
+                idGameMsgs.innerHTML = "No Player 1! Player 2 Claims Your Card!"
                 gameState = .5;
             }
-            if(e.keyCode == 78 && p1CurrCard != p2CurrCard) {
+            if(e.code == "KeyL" && p1CurrCard == p2CurrCard) {
                 score++
-                idGameMsgs.innerHTML = "Nice Job!"
+                idGameMsgs.innerHTML = "Nice Job Player 2! You Claim Player 1's Card!"
+                p2Deck.push(p1CurrCard);
+                p1Deck.splice(p1Index, 1)
                 gameState = .5;
             }
-            else if (e.keyCode == 78){
+            else if(e.code == "KeyL") {
                 score--
-                idGameMsgs.innerHTML = "Oops That's Not Right!"
+                p1Deck.push(p2CurrCard);
+                p2Deck.splice(p2Index, 1)
+                idGameMsgs.innerHTML = "No Player 2! Player 1 Claims Your Card!"
                 gameState = .5;
             }
-            if(e.keyCode != 89 && e.keyCode != 78){
-                return idGameMsgs.innerHTML = "Looks like you pressed an invalid key! <br> Press ‘Y’ if matching or ‘N’ if not matching"
-            }
+            // if(e.code != "KeyY" && e.code != "KeyN"){
+            //     return idGameMsgs.innerHTML = "Looks like you pressed an invalid key! <br> Press ‘Y’ if matching or ‘N’ if not matching"
+            // }
             displayScore();
         }
