@@ -24,7 +24,7 @@ score = 0;
 
 		// write a function that displays instructions
         function displayInstructions() {
-            idInstructions.innerHTML = "When there is a match press y if there is no match press n. <br> Press space after guessing to get the next card. <br> (Be sure to click off the button after starting as pressing space will start a new game if you don't)"
+            idInstructions.innerHTML = "<inst>Welcome to Monster Match! <br> When matching matches show up press your respective <br> button to confirm a match <br> Player 1 press A to confirm a match <br> Player 2 press L to confirm a match <br> Press N to go to the next card <br> The game ends when a player's deck is empty</inst>"
         }
 		// write a function that displays scores
         function displayScore() {
@@ -68,25 +68,36 @@ score = 0;
         
 		// write a function that check for a winner
         function checkWin() {
-            if(gameState != 0) return;
+            if(gameState == -1) return;
             if (p1Deck.length < 1){
                 idGameMsgs.innerHTML = "Congratulations Player 2 Wins! <br> Press Start New Game to start a new game."
                 return true
             }
             else if (p2Deck.length > 0) return false
-                gameState = -1;
-                idGameMsgs.innerHTML = "Congratulations Player 1 Win! <br> Press Start New Game to start a new game."
-                return false
+            gameState = -1;
+            idGameMsgs.innerHTML = "Congratulations Player 1 Win! <br> Press Start New Game to start a new game."
+            return false
         }
         
 		// write a checkMatch(event) function
         function checkMatch(e) {
             if(checkWin()) return
-            else if(gameState != 0 && gameState != .5) return
-            else if(gameState == .5 && e.code == "Space"){
+            else if(gameState == -1) return "sup"
+            else if (e.code == "KeyN" && p1CurrCard != p2CurrCard){ 
+                console.log("'")
                 idGameMsgs.innerHTML = 'Match or Pass?'
                 gameState = 0;
                 return dealCards();
+            }
+            else if(e.code == "KeyN" && p1CurrCard == p2CurrCard) {
+                if(gameState == .5){
+                    gameState = 0;
+                    dealCards();
+                    idGameMsgs.innerHTML = 'Match or Pass?'
+
+                }
+                else idGameMsgs.innerHTML = "There is a match on the table, someone must claim it!";
+                return
             }
             else if (gameState == .5) return
             if(e.code == "KeyA" && p1CurrCard == p2CurrCard) {

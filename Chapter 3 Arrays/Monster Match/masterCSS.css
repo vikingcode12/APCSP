@@ -212,3 +212,8 @@ span{
     display: flex;
     justify-content: center;
 }
+
+inst{
+    color:rgb(141, 101, 53);
+    font-style: italic;
+}
