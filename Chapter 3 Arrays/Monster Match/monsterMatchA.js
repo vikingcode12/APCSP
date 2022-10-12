@@ -6,7 +6,8 @@ deckMax = 8,
 monsterArray = ["'./Monster Pics/monster1.svg'", "'./Monster Pics/monster2.svg'", "'./Monster Pics/monster3.svg'", "'./Monster Pics/monster4.svg'"],
 // -1 is gameover, 0 is playing, 1 is win, .5 is pause
 gameState = -1,
-score = 0;		
+score = 0,
+toggle = false;		
 
 
 		// Function that generates a random number
@@ -22,11 +23,17 @@ score = 0;
             return `<img src=${deck[i]} width=300 height=300>`
         }
 
+        function toggleInstructions() {
+            toggle = !toggle
+            displayInstructions()
+        }
+
 		// write a function that displays instructions
         function displayInstructions() {
+            if(!toggle) return idInstructions.innerHTML = ""
             idInstructions.innerHTML = "<inst>Welcome to Monster Match! <br> When matching matches show up press your respective <br> button to confirm a match <br> Player 1 press A to confirm a match <br> Player 2 press L to confirm a match <br> Press N to go to the next card <br> The game ends when a player's deck is empty</inst>"
         }
-		// write a function that displays scores
+		// Displays scores
         function displayScore() {
             idP1Count.innerHTML = `Cards: ${p1Deck.length}`
             idP2Count.innerHTML = `Cards: ${p2Deck.length}`
@@ -34,6 +41,7 @@ score = 0;
 		
 		// write a function that deals new cards
         function dealCards() {
+            //Make sure nobody has won and the state is play
             if(checkWin()) return
             if(gameState != 0) gameState = 0
             p1Index = randInt(0, p1Deck.length - 1)
