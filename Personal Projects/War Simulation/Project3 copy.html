@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <link rel="stylesheet" href="./masterCSS.css">
+        <script defer src="Project3 copy.js"></script>
+    </head>
+
+    <body onkeydown="if (event.keyCode === 82) {reset()}">
+        <h1>Welcome To <span>WAR</span> Sim</h1>
+        <span>Epilepsy Warning!</span><br>
+        In this war the losers cards bet added to the winner's deck<br>and the game doesn't stop until one of the decks hit 0<br>so beware this will take a while<br>
+        This is an attempt at learning how to make most of this server side<br> to allow multiple people to see the same thing.<br>
+        <br>
+        <button onclick="autoClick()">Simulation</button><br><br>
+        <img id=idPlayerCard height="500" width="400" src="./Cards/def.png">&nbsp&nbsp&nbsp
+        <img id=idRoboCard height="500" width="400" src="./Cards/def.png">
+        <div id=idOutcome></div><br>
+        <div id=idScore></div><br>
+        <div id=idCards></div><br>
+    </body>
+</html>
