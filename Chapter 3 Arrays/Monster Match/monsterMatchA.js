@@ -4,7 +4,7 @@ p1Index, p2Index,
 p1CurrCard, p2CurrCard, 
 deckMax = 8,
 monsterArray = ["'./Monster Pics/monster1.svg'", "'./Monster Pics/monster2.svg'", "'./Monster Pics/monster3.svg'", "'./Monster Pics/monster4.svg'"],
-// -1 is gameover, 0 is playing, 1 is win, .5 is pause
+// -1 is gameover, 0 is playing, .5 is pause
 gameState = -1,
 score = 0,
 toggle = false;		
@@ -28,7 +28,7 @@ toggle = false;
             displayInstructions()
         }
 
-		// write a function that displays instructions
+		// displays instructions
         function displayInstructions() {
             if(!toggle) return idInstructions.innerHTML = ""
             idInstructions.innerHTML = "<inst>Welcome to Monster Match! <br> When matching matches show up press your respective <br> button to confirm a match <br> Player 1 press A to confirm a match <br> Player 2 press L to confirm a match <br> Press N to go to the next card <br> The game ends when a player's deck is empty</inst>"
@@ -39,7 +39,7 @@ toggle = false;
             idP2Count.innerHTML = `Cards: ${p2Deck.length}`
         }
 		
-		// write a function that deals new cards
+		// Deals new cards
         function dealCards() {
             //Make sure nobody has won and the state is play
             if(checkWin()) return
@@ -56,7 +56,7 @@ toggle = false;
             displayScore()
         }
 		
-		// write a function that starts a new game of Monster Match
+		// Starts a new game of Monster Match
 		function newGame() {
             score = 0;
             gameState = 0;
@@ -74,7 +74,7 @@ toggle = false;
             idGameMsgs.innerHTML = 'Match or Pass?'
         }
         
-		// write a function that check for a winner
+		// Check for a winner
         function checkWin() {
             if(gameState == -1) return;
             if (p1Deck.length < 1){
@@ -87,7 +87,7 @@ toggle = false;
             return false
         }
         
-		// write a checkMatch(event) function
+		// Write a checkMatch(event) function
         function checkMatch(e) {
             if(checkWin()) return
             else if(gameState == -1) return "sup"
@@ -136,8 +136,8 @@ toggle = false;
                 idGameMsgs.innerHTML = "No Player 2! Player 1 Claims Your Card!"
                 gameState = .5;
             }
-            // if(e.code != "KeyY" && e.code != "KeyN"){
-            //     return idGameMsgs.innerHTML = "Looks like you pressed an invalid key! <br> Press ‘Y’ if matching or ‘N’ if not matching"
-            // }
+            if(e.code != "KeyA" && e.code != "KeyN" && e.code != "KeyL"){
+                return idGameMsgs.innerHTML = "Looks like you pressed an invalid key! <br> Press ‘A’ for Player 1 ‘L’ for Player 2 if there's not a match press ‘N’"
+            }
             displayScore();
         }
