@@ -44,12 +44,13 @@ toggle = false;
             //Make sure nobody has won and the state is play
             if(checkWin()) return
             if(gameState != 0) gameState = 0
+            //Grabs random cards from decks
             p1Index = randInt(0, p1Deck.length - 1)
             p2Index = randInt(0, p2Deck.length - 1)
-            console.log(p1Index,p2Index)
+            //Grab those cards
             p1CurrCard = p1Deck[p1Index]
             p2CurrCard = p2Deck[p2Index]
-            console.log(p1CurrCard,p2CurrCard)
+            //Display them
             idImage1.innerHTML = p1CurrCard 
             idImage2.innerHTML = p2CurrCard
             displayInstructions()
@@ -66,7 +67,7 @@ toggle = false;
             p2Deck = []
             for (let i = 0; i < deckMax; i++) {
                 j = i % 4
-                console.log(j)
+                // Fill the deck with the formatted cards.
                 p1Deck[i] = formatCard(monsterArray, j)
                 p2Deck[i] = formatCard(monsterArray, j)
             }
@@ -76,38 +77,50 @@ toggle = false;
         
 		// Check for a winner
         function checkWin() {
-            if(gameState == -1) return;
-            if (p1Deck.length < 1){
+            //No need to check if game is over
+            if(gameState == -1) return false;
+            //No need to run code if nobody won
+            else if(p1Deck.length > 0 && p2Deck.length > 0) return false;
+            //check if P2 wins
+            else if (p1Deck.length < 1){
                 idGameMsgs.innerHTML = "Congratulations Player 2 Wins! <br> Press Start New Game to start a new game."
                 return true
             }
-            else if (p2Deck.length > 0) return false
-            gameState = -1;
-            idGameMsgs.innerHTML = "Congratulations Player 1 Win! <br> Press Start New Game to start a new game."
-            return false
+            // If P1 didn't win then P2 won
+            else if (p2Deck.length < 1) {
+                gameState = -1;
+                idGameMsgs.innerHTML = "Congratulations Player 1 Win! <br> Press Start New Game to start a new game."
+                return true
+            }
         }
         
-		// Write a checkMatch(event) function
+		// checkMatch(event) function
         function checkMatch(e) {
+            //Check if somebody has won or if the gamestate is game over.
             if(checkWin()) return
-            else if(gameState == -1) return "sup"
+            else if(gameState == -1) return
+            //Cycle to next card if there's not a match
             else if (e.code == "KeyN" && p1CurrCard != p2CurrCard){ 
-                console.log("'")
                 idGameMsgs.innerHTML = 'Match or Pass?'
                 gameState = 0;
                 return dealCards();
             }
+            //Check if theres a match
             else if(e.code == "KeyN" && p1CurrCard == p2CurrCard) {
+                //If its been claimed deal new cards
                 if(gameState == .5){
                     gameState = 0;
                     dealCards();
                     idGameMsgs.innerHTML = 'Match or Pass?'
 
                 }
+                //If it hasn't been claimed it will force someone to claim it.
                 else idGameMsgs.innerHTML = "There is a match on the table, someone must claim it!";
                 return
             }
+            //No need for further checks if the game isn't being played
             else if (gameState == .5) return
+            //If player 1 claims and its a match they will take the card
             if(e.code == "KeyA" && p1CurrCard == p2CurrCard) {
                 score++
                 idGameMsgs.innerHTML = "Nice Job Player 1! You Claim Player 2's Card!"
@@ -115,6 +128,7 @@ toggle = false;
                 p2Deck.splice(p2Index, 1)
                 gameState = .5;
             }
+            //If player 1 misfires they lose their card
             else if(e.code == "KeyA") {
                 score--
                 p2Deck.push(p1CurrCard);
@@ -122,6 +136,7 @@ toggle = false;
                 idGameMsgs.innerHTML = "No Player 1! Player 2 Claims Your Card!"
                 gameState = .5;
             }
+            //If player 2 claims and its a match they will take the card
             if(e.code == "KeyL" && p1CurrCard == p2CurrCard) {
                 score++
                 idGameMsgs.innerHTML = "Nice Job Player 2! You Claim Player 1's Card!"
@@ -129,6 +144,7 @@ toggle = false;
                 p1Deck.splice(p1Index, 1)
                 gameState = .5;
             }
+            //If player 2 misfires they lose their card
             else if(e.code == "KeyL") {
                 score--
                 p1Deck.push(p2CurrCard);
@@ -136,6 +152,7 @@ toggle = false;
                 idGameMsgs.innerHTML = "No Player 2! Player 1 Claims Your Card!"
                 gameState = .5;
             }
+            // If other buttons are presses remind the player of the buttons they should press
             if(e.code != "KeyA" && e.code != "KeyN" && e.code != "KeyL"){
                 return idGameMsgs.innerHTML = "Looks like you pressed an invalid key! <br> Press ‘A’ for Player 1 ‘L’ for Player 2 if there's not a match press ‘N’"
             }
