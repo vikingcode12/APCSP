@@ -24,7 +24,7 @@ score = 0;
 
 		// write a function that displays instructions
         function displayInstructions() {
-            idInstructions.innerHTML = "When there is a match press y if there is no match press n. <br> Press space after guessing to get the next card. <br> (Be sure to click off the button after starting as pressing space will start a new game if you don't)"
+            idInstructions.innerHTML = "When there is a match press y if there is no match press n. <br> Once you get a score of 10 you win <br> Press space after guessing to get the next card. <br> (Be sure to click off the button after starting as pressing space will start a new game if you don't)"
         }
 		// write a function that displays scores
         function displayScore() {
@@ -44,7 +44,7 @@ score = 0;
             idImage1.innerHTML = p1CurrCard 
             idImage2.innerHTML = p2CurrCard
             displayInstructions()
-            displayScore()
+            idInstructions.innerHTML = "When there is a match press y if there is no match press n."
         }
 		
 		// write a function that starts a new game of Monster Match
@@ -62,6 +62,7 @@ score = 0;
                 p2Deck[i] = formatCard(monsterArray, k);
             }
             dealCards()
+            displayScore();
             idGameMsgs.innerHTML = 'Match or Pass?'
         }
         
