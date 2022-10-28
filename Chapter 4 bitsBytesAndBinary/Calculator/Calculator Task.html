@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>JavaScript Calculator</title>
+	<!-- My recent master CSS -->
+	<link rel="stylesheet" href="./masterCSS.css">
+	<!-- <style>
+		body {
+			padding: 10px 0;
+			border: 5px solid yellow
+			;
+			text-align: center;
+			background-color: green;
+			font-family: "Arial Black", Gadget, sans-serif;
+		}
+	</style> -->
+	<script defer src="./Calc.js"></script>
+</head>
+<body>
+	<h1>JavaScript Calculator</h1>
+	<img src="calculator.jpg">
+	<br>
+	<input type="text" id="idNum1" placeholder="first number">
+		<select id="idSelectBox">
+			<option>+</option>
+			<option>-</option>
+			<option>*</option>
+			<option>/</option>
+			<option>^</option>
+			<!--Note that // is integer division, which you will implement as Math.floor(num1/num2)-->
+			<option>//</option>
+			<!--Note that % is remainder or MOD-->
+			<option>%</option>
+		</select>
+		
+	<input type="text" id="idNum2" placeholder="second number">
+	<br>
+	<!--Add an appropriate event handler to each of the following buttons:--> 
+	<button onclick="calculate()">Calculate</button>
+	<button onclick="clearHistory()">Clear</button>
+	<br>
+	<br>
+	<div id="idCalcDiv"></div>
+	<br>
+	<br>
+	
+	
+</body>
+</html>

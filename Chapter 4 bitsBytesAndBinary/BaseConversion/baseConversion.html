@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="masterCSS.css">
+    <script src="./baseConversion.js"></script>
+    <title>Base Converter</title>
+</head>
+<body>
+    <h1>Base Converter</h1>
+    <br><br>
+    <div class="centered-container">
+        <img src="./conversion.png" width="426" height="240">
+        <div class="break"></div>
+        <input type="text" placeholder="Input Number" id="idInputNum">
+        <input type="text" placeholder="Output Number" id="idOutputNum">
+        <div class="break"></div>
+        <select id="idSelectBase">
+            <option value="none">Select</option>
+            <option value="b2-b10">Base2 to Base10</option>
+            <option value="b8-b10">Base8 to Base10</option>
+            <option value="b16-b10">Base16 to Base10</option>
+            <option value="b10-b2">Base10 to Base2</option>
+            <option value="b10-b8">Base10 to Base8</option>
+            <option value="b10-b16">Base10 to Base16</option>
+        </select>
+        <div class="break"></div>
+        <button class="btn" onclick="convert(idInputNum.value)">Convert</button>
+    </div>
+</body>
+</html>

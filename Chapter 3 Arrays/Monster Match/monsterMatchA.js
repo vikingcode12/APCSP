@@ -59,18 +59,22 @@ toggle = false;
 		
 		// Starts a new game of Monster Match
 		function newGame() {
+            //reset score and state
             score = 0;
             gameState = 0;
             idPlayer1.innerHTML = "Player 1"
             idPlayer2.innerHTML = "Player 2"
+            //empty decks
             p1Deck = []
             p2Deck = []
+            //refill decks
             for (let i = 0; i < deckMax; i++) {
                 j = i % 4
                 // Fill the deck with the formatted cards.
                 p1Deck[i] = formatCard(monsterArray, j)
                 p2Deck[i] = formatCard(monsterArray, j)
             }
+            //begin
             dealCards()
             idGameMsgs.innerHTML = 'Match or Pass?'
         }
@@ -156,5 +160,6 @@ toggle = false;
             if(e.code != "KeyA" && e.code != "KeyN" && e.code != "KeyL"){
                 return idGameMsgs.innerHTML = "Looks like you pressed an invalid key! <br> Press ‘A’ for Player 1 ‘L’ for Player 2 if there's not a match press ‘N’"
             }
+            //Display score in the end
             displayScore();
         }
