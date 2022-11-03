@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="masterCSS.css">
     <script src="./baseConversion.js"></script>
+    <script src="./base64Encoding.js"></script>
     <title>Base Converter</title>
 </head>
 <body>
@@ -14,10 +15,10 @@
     <div class="centered-container">
         <img src="./conversion.png" width="426" height="240">
         <div class="break"></div>
-        <input type="text" placeholder="Input Number" id="idInputNum">
+        <input type="text" placeholder="Input Number" id="idInputNum" onkeyup="convert(this.value)">
         <input type="text" placeholder="Output Number" id="idOutputNum">
         <div class="break"></div>
-        <select id="idSelectBase">
+        <select id="idSelectBase" onchange="convert(idInputNum.value)">
             <option value="none">Select</option>
             <option value="b2-b10">Base2 to Base10</option>
             <option value="b8-b10">Base8 to Base10</option>
@@ -25,6 +26,10 @@
             <option value="b10-b2">Base10 to Base2</option>
             <option value="b10-b8">Base10 to Base8</option>
             <option value="b10-b16">Base10 to Base16</option>
+            <option value="b2-b16">Base2 to Base16</option>
+            <option value="b2-b8">Base2 to Base8</option>
+            <option value="b16-b2">Base16 to Base2</option>
+            <option value="b8-b2">Base8 to Base2</option>
         </select>
         <div class="break"></div>
         <button class="btn" onclick="convert(idInputNum.value)">Convert</button>

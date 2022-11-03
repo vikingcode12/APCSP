@@ -4,13 +4,17 @@
 function convert(num) {
     let output;
     let base = idSelectBase.value;
-    if(base == "none") return alert("Please select a conversion")
+    if(base == "none") return// alert("Please select a conversion")
     else if(base == "b2-b10") output = convertBase2Base10(num);
     else if(base == "b8-b10") output = convertBase8Base10(num);
     else if(base == "b16-b10") output = convertBase16Base10(num);
     else if(base == "b10-b2") output = convertBase10Base2(num);
     else if(base == "b10-b8") output = convertBase10Base8(num);
     else if(base == "b10-b16") output = convertBase10Base16(num);
+    else if(base == "b2-b16") output = convertBase2Base16(num);
+    else if(base == "b16-b2") output = convertBase16Base2(num);
+    else if(base == "b2-b8") output = convertBase2Base8(num);
+    else if(base == "b8-b2") output = convertBase8Base2(num);
     idOutputNum.value = output;
 }
 
@@ -96,7 +100,7 @@ function convertBase10Base2(b10){
     let num = b10;
     let rm = []
     b10 = Number(b10)
-    for (let i = 0; num > 0; i++) {
+    while (num > 0) {
         rm.push(num%2)
         num = Math.trunc(num/2)
         // console.log(num)   
@@ -113,7 +117,7 @@ function convertBase10Base8(b10){
     let num = b10;
     let rm = []
     b10 = Number(b10)
-    for (let i = 0; num > 0; i++) {
+    while (num > 0) {
         rm.push(num%8)
         num = Math.trunc(num/8)
         // console.log(num)   
@@ -132,11 +136,32 @@ function convertBase10Base16(b10){
     let remainder;
     let rmArr = []
     b10 = Number(b10)
-    for (let i = 0; num > 0; i++) {
+    while (num > 0) {
         remainder = num%16
         rmArr.push(BASE_16_KEY[remainder])
         num = Math.trunc(num/16)
     }
     output = rmArr.reverse().toString().replaceAll(',', '')
     return output
+}
+
+function convertBase16Base2(b16) {
+    let b10Num = convertBase16Base10(b16)
+    return convertBase10Base2(b10Num)
+}
+
+function convertBase2Base16(b2) {
+    let b10Num = convertBase2Base10(b2)
+    return convertBase10Base16(b10Num)
+}
+
+function convertBase8Base2(b8) {
+    let b10Num = convertBase8Base10(b8)
+    return convertBase10Base2(b10Num)
+}
+
+function convertBase2Base8(b2) {
+    let b10Num = convertBase2Base10(b2)
+    console.log(b10Num)
+    return convertBase10Base8(b10Num)
 }
