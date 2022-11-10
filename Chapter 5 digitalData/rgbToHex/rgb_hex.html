@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./masterCSS.css">
+    <script defer src="./rgb_hex.js"></script>
+    <title>RGB To HEX</title>
+</head>
+<body>
+    <div id="idFakeBody">
+        <h1>Convert Integers To RGB</h1>
+        <input id="idRed" placeholder="RED" type="text">
+        <input id="idGreen" placeholder="GREEN" type="text">
+        <input id="idBlue" placeholder="BLUE" type="text">
+        <input id="idAlpha" placeholder="Alpha (Optional)" type="text">
+        <br>
+        <button onclick="handleButtonPress(idRed.value, idGreen.value, idBlue.value, idAlpha.value)" class="btn">Convert RGB</button>
+        <br><br>
+        <div id="outputMessage"></div>
+    </div>
+</body>
+</html>
