@@ -41,9 +41,20 @@ function convertBase2Base10(b2){
 // Function that converts binary to ASCII
 // Param: Binary
 // Returns: String
-function convertBin2ASCII(str) {
+function convertBin2ASCII(binStr) {
     let binArr = [] //str.split(' ')
     binArr.map((binSegment) => {
-
+        let char = binSegment.charAt(0)
+        console.log(char)
     })
+}
+
+
+function text2Binary(string) {
+    let output = string.charCodeAt(0).toString(2)
+    // Ensure the characters are 8 characters long allowing for proper conversion
+    while (output.length < 8) {
+        output = "0" + output
+    }
+    return output
 }
