@@ -41,7 +41,8 @@ time = data[0]
 sky = data[1]
 
 listdiv = soup.findAll('div', attrs={'class': 'BNeawe s3v9rd AP7Wnd'})
-print(str)
+
+
 
 # FIND GENERAL CONDITIONS
 
