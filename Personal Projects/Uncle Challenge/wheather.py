@@ -41,11 +41,12 @@ time = data[0]
 sky = data[1]
 
 listdiv = soup.findAll('div', attrs={'class': 'BNeawe s3v9rd AP7Wnd'})
+print(str)
 
 # FIND GENERAL CONDITIONS
 
 # particular list with required data
-strd = listdiv[30].text
+strd = listdiv[5].text
 tempStr = listdiv[1].text
 tempArr = tempStr.split('.')
 generalConditions = tempArr[0].lower()
@@ -55,6 +56,6 @@ tempHigh = tempArr[1]
 pos = strd.find('Wind')
 
 print("It's", generalConditions)
-print("Temperature is", temperature, " ", tempHigh)
+print("Temperature is", temperature)
 print("Time: ", time)
 print("Sky: ", sky)

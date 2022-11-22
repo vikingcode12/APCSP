@@ -15,13 +15,14 @@
         <!-- Image source: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.convertbinary.com%2Fto-text%2F&psig=AOvVaw2VNYrO6APT_A3zHnPl0R2b&ust=1668871540177000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCOD_65mGuPsCFQAAAAAdAAAAABAD -->
         <!-- A picture demonstrating binary to string conversion -->
         <img src="./Binary-to-Text-1.webp" width="400"><br><br>
-        <textarea placeholder="Input String or Binary" name="" id="" cols="30" rows="10"></textarea><br><br>
-        <select id="idSelectBase" onchange="convert(idInputNum.value)">
+        <textarea placeholder="Input String or Binary" name="" id="idInp" cols="30" rows="10"></textarea><br><br>
+        <select id="idSelectConversion">
             <option value="none">Select</option>
             <option value="bin-str">Binary-String</option>
             <option value="str-bin">String-Binary</option> -->
         </select>
-        <button class="btn">Display Result</button>
+        <button class="btn" onclick="convert(idSelectConversion.value, idInp.value)">Display Result</button><br>
+        <div id="idOutput"></div>
     <!-- </div> -->
 </body>
 </html>
