@@ -86,8 +86,9 @@ def fetchWeather():
     generalConditions = response["weather"][0]['description'].upper()
     fullTime = dt.datetime.utcfromtimestamp(response["dt"] + response["timezone"])
     time = str(fullTime).split(' ')[1]
-    print(city, temp_farinheit)
-    output = f"Time: {time} \n{generalConditions} \nTemp in {city}: {temp_farinheit}°F \nFeels like: {feels_farinheit}°F \nHigh: {temp_max_farinheit}°F \nLow: {temp_min_farinheit}°F"
+    # I believe we are given this in m/s so use the conversion factor 2.237 to reach m/hr
+    windSpeed = response["wind"]["speed"]*2.237
+    output = f"Local Time: {time} \n{generalConditions} \nTemp in {city}: {temp_farinheit}°F \nFeels like: {feels_farinheit}°F \nHigh: {temp_max_farinheit}°F \nLow: {temp_min_farinheit}°F \nWind Speed: {windSpeed}M/H"
     outputLabel.config(text=output)
 
 label3 = tk.Label(root, text=" ")
