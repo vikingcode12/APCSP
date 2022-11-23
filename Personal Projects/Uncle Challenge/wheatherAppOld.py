@@ -1,5 +1,3 @@
-# Create a program with a GUI that can fetch weather from zipcode using google api (NGL I would've much rather used react JS)
-
 # Imports
 import tkinter as tk;
 
@@ -65,21 +63,17 @@ def fetchWeather():
     # format the data
     data = str.split('\n')
     time = data[0]
-    sky = data[1]
+    generalConditions = data[1]
 
     listdiv = soup.findAll('div', attrs={'class': 'BNeawe s3v9rd AP7Wnd'})
 
 
     # particular list with required data
+    strd = listdiv[5].text
     tempStr = listdiv[1].text
-    tempArr = tempStr.split('.')
-    print(listdiv)
-    generalConditions = tempArr[0].lower()
-    tempHigh = tempArr[1]
-    output = "It's " + generalConditions + "\n"
-    output += "Temperature is " + temperature + " " + tempHigh + "\n"
     output += "Time: " + time + "\n"
-    output += "Sky: " + sky + "\n"
+    output =  generalConditions + "\n"
+    output += "Temperature is " + temperature + "\n"
     outputLabel.config(text=output)
 
 label3 = tk.Label(root, text=" ")

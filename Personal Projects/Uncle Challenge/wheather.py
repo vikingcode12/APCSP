@@ -38,25 +38,28 @@ str = soup.find('div', attrs={'class': 'BNeawe tAd8D AP7Wnd'}).text
 # format the data
 data = str.split('\n')
 time = data[0]
-sky = data[1]
+generalConditions = data[1]
 
-listdiv = soup.findAll('div', attrs={'class': 'BNeawe s3v9rd AP7Wnd'})
+list = soup.findAll('div', attrs={'class': 'BNeawe s3v9rd AP7Wnd'})
 
 
 
 # FIND GENERAL CONDITIONS
 
 # particular list with required data
-strd = listdiv[5].text
-tempStr = listdiv[1].text
-tempArr = tempStr.split('.')
-generalConditions = tempArr[0].lower()
+strd = list[5].text
+tempStr = list[1].text
+tempArr = tempStr.split('High')
+print(tempArr)
 tempHigh = tempArr[1]
 
 # formatting the string
 pos = strd.find('Wind')
 
-print("It's", generalConditions)
-print("Temperature is", temperature)
-print("Time: ", time)
-print("Sky: ", sky)
+for i in range(5):
+  print("")
+  
+print(city)
+print(time)
+print("Its", generalConditions)
+print("Temperature is", temperature, tempHigh)
