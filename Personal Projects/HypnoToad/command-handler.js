@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { Collection, Events, REST, Routes } = require("discord.js")
+const {Collection ,REST, Routes, Events } = require('discord.js');
 const getFiles = require("./get-files")
 require('dotenv/config')
 
@@ -15,19 +15,28 @@ module.exports = async (client) => {
         if (commandFile.default) commandFile = commandFile.default
         const split = command.replace(/\\/g, '/').split('/')
         const commandName = split[split.length - 1].replace(suffix, '')
-        if (commandFile.data){
-             commands.push(commandFile.data.toJSON())
+        if ("data" in commandFile && 'execute' in commandFile){
+            commands.push(commandFile.data.toJSON())
      
-             // Honestly have no idea why this is here but it was in the documentation and the program doesn't work without it. 
-             // Perhaps the application checks to see if there is a matching command in the client?
-             client.commands.set(commandFile.data.name, commandFile);
+            // Honestly have no idea why this is here but it was in the documentation and the program doesn't work without it. 
+            // Perhaps the application checks to see if there is a matching command in the client?
+            client.commands.set(commandFile.data.name, commandFile);
         }
     }
 
-    // Set the commands in the actual bot
-    client.application.commands.set(commands)
+    
+    // Register the commands in the actual bot
+    const rest = new REST({ version: '10' }).setToken(process.env.token);
 
-    console.log(`Updated ${commands.length} '/' command(s)`)
+      (async () => {
+        try {
+            await rest.put(Routes.applicationCommands(client.user.id), { body: commands });
+      
+            console.log('Successfully reloaded application (/) commands.');
+        } catch (error) {
+            console.error(error);
+        }
+      })();
     
 
     client.on(Events.InteractionCreate, async interaction => {
@@ -51,20 +60,5 @@ module.exports = async (client) => {
         }
     });
 
-    // This works for text based commands but / commands are becoming more popular and pushed by discord so I will rewrite one that works for / commands
-    // client.on('messageCreate', (message) => {
-    //     if(message.author.bot || !message.content.startsWith('!')) return
-    //     const args = message.content.slice(1).split(/ +/)
-    //     const commandName = args.shift().toLowerCase()
-
-    //     if(!commands[commandName]) return
-
-    //     try {
-    //         commands[commandName].callback(message, ...args)
-    //     }
-    //     catch (err){
-    //         console.error(err)
-    //     }
-    // })
 }
 
