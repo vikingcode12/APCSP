@@ -44,9 +44,9 @@ client.on('messageCreate', async (msg) => {
   if (!msg.guild || msg.author.bot) return;
   const userId = msg.author.id
   const guildId = msg.guildId
-  addXP(userId, guildId)
+  await addXP(userId, guildId)
   let lvlStatus = await checkLvl(userId, guildId)
-  if(lvlStatus?.status) {
+  if(lvlStatus?.newlvl) {
     const LvlEmbedTitle = 'Level Up!'
     const LvlEmbedDescription = `**Nice Job!** ${msg.author}, you just leveled up to level **${lvlStatus?.lvl}**!\nCongrats!`
     const LvlEmbedImg = 'https://c.tenor.com/ihS0L_QrTu8AAAAC/level-up.gif'
