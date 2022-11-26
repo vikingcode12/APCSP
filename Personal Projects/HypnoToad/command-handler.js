@@ -15,11 +15,13 @@ module.exports = async (client) => {
         if (commandFile.default) commandFile = commandFile.default
         const split = command.replace(/\\/g, '/').split('/')
         const commandName = split[split.length - 1].replace(suffix, '')
-        commands.push(commandFile.data.toJSON())
-
-        // Honestly have no idea why this is here but it was in the documentation and the program doesn't work without it. 
-        // Perhaps the application checks to see if there is a matching command in the client?
-        client.commands.set(commandFile.data.name, commandFile);
+        if (commandFile.data){
+             commands.push(commandFile.data.toJSON())
+     
+             // Honestly have no idea why this is here but it was in the documentation and the program doesn't work without it. 
+             // Perhaps the application checks to see if there is a matching command in the client?
+             client.commands.set(commandFile.data.name, commandFile);
+        }
     }
 
     // Set the commands in the actual bot
