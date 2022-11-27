@@ -17,9 +17,9 @@ module.exports = {
         const target = interaction.options.getMember('target')?.user || interaction.user // Grab the target.
         if(!target?.id) return interaction.reply({content: "Seems like this user doesn't exist or isn't in this server."});
         else if(target.bot) return interaction.reply({content: `Bot XP isn't tracked so ${target.tag} does not have an XP profile.`});
-        await interaction.deferReply()
+        await interaction.deferReply() // Need an await just incase the code finished before the reply is defered
         
-        const userStatus = await fetchStatus(target.id, interaction.guildId)
+        const userStatus = await fetchStatus(target.id, interaction.guildId) 
         if(!userStatus) return interaction.editReply({content:`Seems like ${target.tag} has not earned any xp so far.`})
         
         const lvl = userStatus.lvl
@@ -38,6 +38,8 @@ module.exports = {
         bar_width = 300;
         let bg,
         avatar;
+
+        // Grab images
         bg = await loadImage('https://cdn.discordapp.com/attachments/649377254891323422/999805136039850104/bg.png')
         avatar = await loadImage(target.displayAvatarURL({extension:'png', dynamic:false}))
         
