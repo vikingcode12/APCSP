@@ -1,4 +1,4 @@
-const util = require("../../utilityClassesAndFunctions.js");
+const { sleep } = require("../../utilityClassesAndFunctions.js");
 const lvls = require("../../level-sys/leveling-functions.js");
 const {createCanvas, loadImage, registerFont} = require("canvas");
 const { AttachmentBuilder, SlashCommandBuilder } = require("discord.js");
@@ -27,9 +27,10 @@ module.exports = {
         const nextLvl = userStatus.xpNeeded
         const rank = userStatus.place
 
-        registerFont('./fonts/AreaKilometer50.ttf', {
-            family:'AreaKilometer50',
+        registerFont('fonts/AreaKilometer50.ttf', {
+            family:'a AreaKilometer50',
         })
+
         
         const canvas = createCanvas(500, 150),
         cWidth = canvas.width,
@@ -72,7 +73,7 @@ module.exports = {
         ctx.strokeRect(150, 125, bar_width * xp / nextLvl, 0)
         
         //Text 
-        ctx.font = '40px AreaKilometer50';
+        ctx.font = '40px "a AreaKilometer50"';
         ctx.fillStyle = 'white';
         ctx.textAlign = 'center';
         
@@ -83,7 +84,7 @@ module.exports = {
         ctx.fillText(`#${rank}`, 320, 40, 50)
         ctx.fillText(`${lvl}`, 465, 40, 50)
         
-        ctx.font = '20px AreaKilometer50';
+        ctx.font = '20px "a AreaKilometer50"';
         ctx.textAlign = 'left';
         ctx.fillText(`${target.tag}`, 147, 105, 200)
         
