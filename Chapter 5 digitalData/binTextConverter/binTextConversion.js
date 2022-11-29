@@ -1,5 +1,6 @@
 // Function that converts decimal to binary
 // Source: baseConversion.js - Jacob Ramah
+// Written on Oct 31, 2022
 // Param: Base 10 Number
 // Returns: Base 2 num / Binary Number
 function convertBase10Base2(b10){
@@ -18,6 +19,7 @@ function convertBase10Base2(b10){
 
 // Function that converts binary to decimal
 // Source: baseConversion.js - Jacob Ramah
+// Written on Oct 31, 2022
 // Param: Binary Number
 // Returns: Base 10 num / Standard Number
 function convertBase2Base10(b2){
@@ -38,26 +40,33 @@ function convertBase2Base10(b2){
     return output
 }
 
-// Function that converts binary to ASCII
-// Param: Binary
-// Returns: String
+/**
+ * Function that converts binary to ASCII
+ * 
+ * @param {string} - Binary String 
+ * @returns {string} - ASCII string
+ */
+
 function convertBin2ASCII(binStr) {
     let binArr = binStr.toString().split(' ')
     let output = ''
-    while(!binArr[binArr.length - 1]) {
-        binArr.pop()
-    }
     binArr.map((binSegment) => {
         // Converts binary to ASCII
         // From: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/fromCharCode
-        output += String.fromCharCode(convertBase2Base10(binSegment));
+        // Accessed on Nov, 21
+        while (binSegment.length < 8) binSegment = '0' + binSegment
+        let string = String.fromCharCode(convertBase2Base10(binSegment));
+        output += string
     })
     return output;
 }
 
-// Function that converts binary to ASCII
-// Param: String
-// Returns: Binary
+/**
+ * Function that converts binary to ASCII
+ * 
+ * @param {string} - An ASCII string 
+ * @returns {string} - A binary string
+ */
 function converttext2Binary(string) {
     let charArr = string.split('')
     let output = ''
