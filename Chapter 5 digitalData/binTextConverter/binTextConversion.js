@@ -71,6 +71,10 @@ function converttext2Binary(string) {
     let charArr = string.split('')
     let output = ''
     charArr.map((char) =>{
+        // Converts text into ASCII
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/charCodeAt
+        // Accessed on Nov, 29 2022
+        // .toString(2 converts it to a binary string)
         output += char.charCodeAt(0).toString(2) + " "
     })
     // Ensure the characters are 8 characters long allowing for proper conversion
