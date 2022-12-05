@@ -27,6 +27,7 @@ module.exports = {
         const nextLvl = userStatus.xpNeeded
         const rank = userStatus.place
 
+        // Register font doesn't seem to work on my Fedora linux machine.
         registerFont('fonts/AreaKilometer50.ttf', {
             family:'a AreaKilometer50',
         })
