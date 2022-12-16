@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./masterCSS.css">
+    <script src="index.js" defer></script>
+    <title>Ceaser Cipher</title>
+</head>
+<body>
+    <h1>Ceaser Cipher</h1>
+    <textarea name="" id="idInputText" cols="30" rows="10"></textarea><br><br>
+    Key:&nbsp; <select name="" id="idSelectKey">
+    </select><br><br>
+    <button class="btn" onclick="encrypt(idInputText.value, idSelectKey.value)">Encrypt</button><button class="btn" onclick="decrypt(idInputText.value,idSelectKey.value)">Decrypt</button>
+    <button class="btn" onclick="getRandKey()">Pick Random Key</button> <button class="btn" onclick="toggleInstructions()">Instructions</button><br><br>
+    <div id='idOutput' class="output"></div>
+    <br>
+    <div id="idInstructions"></div>
+</body>
+</html>
