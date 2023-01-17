@@ -16,7 +16,6 @@ function fillSelect() {
  * @param {string} key 
  */
 function encrypt(iStr, key) {
-    console.log(iStr)
     let string = iStr.toUpperCase();
     let letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     let outputStr = ''
@@ -26,11 +25,12 @@ function encrypt(iStr, key) {
             const ele2 = letters[j]
             if(ele1 == ele2) {
                 let newIndex = j + Number(key.charAt(key.length - 1))
-                console.log(newIndex)
                 if (newIndex > letters.length - 1) newIndex = newIndex - letters.length
                 outputStr += letters[newIndex]
                 break;
+                
             }
+            else if (j == letters.length-1) outputStr += ele1 
         }
     }
     idOutput.textContent = outputStr;
@@ -53,13 +53,11 @@ function decrypt(iStr, key) {
             const ele2 = letters[j]
             if(ele1 == ele2) {
                 let newIndex = j - Number(key.charAt(key.length - 1))
-                console.log(newIndex)
                 if (newIndex < 0) newIndex = newIndex + letters.length
                 outputStr += letters[newIndex]
                 break;
             }
-            else if(j == letters.length) outputStr += ele1
-            console.log(j == letters.length)
+            else if(j == letters.length-1) {outputStr += ele1; console.log('spchar')}
         }
     }
     idOutput.textContent = outputStr.toLowerCase();
@@ -74,7 +72,7 @@ function decrypt(iStr, key) {
  * 
  * @param {number} min 
  * @param {number} max 
- * @returns {number}
+ * @returns {integer}
  */
 function getRandInt(min, max) {
     min = Math.ceil(min);
