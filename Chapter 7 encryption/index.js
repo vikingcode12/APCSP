@@ -3,8 +3,9 @@
  */
 function fillSelect() {
     output = ''
+    // Add 26 keys to the select box
     for (let i = 0; i < 26; i++) {
-        output += `<option value="key${i+1}">${i+1}</option>`
+        output += `<option value="${i+1}">${i+1}</option>`
     }   
     idSelectKey.innerHTML = output
 }
@@ -20,20 +21,26 @@ function encrypt(iStr, key) {
     let letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     let outputStr = ''
     for (let i = 0; i < string.length; i++) {
+        // Get the current letter from the input string
         const ele1 = string[i]
+        // Loop through all letters of the alphabet
         for (let j = 0; j < letters.length; j++) {
             const ele2 = letters[j]
             if(ele1 == ele2) {
-                let newIndex = j + Number(key.charAt(key.length - 1))
+                // If the letters match then add the key from index J then set that as the new index
+                let newIndex = j + Number(key)
                 if (newIndex > letters.length - 1) newIndex = newIndex - letters.length
                 outputStr += letters[newIndex]
+                // Break and start looking for the next letter
                 break;
                 
             }
+            // If it didn't match then it must be a special character so just append the special character to the output string
             else if (j == letters.length-1) outputStr += ele1 
         }
     }
-    idOutput.textContent = outputStr;
+    // Wrap cipher text in ct tag for cipher text styling
+    idOutput.innerHTML = "<ct>" + outputStr + "</ct>";
     idOutput.style.backgroundColor = 'red'
 }
 
@@ -48,16 +55,22 @@ function decrypt(iStr, key) {
     let letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     let outputStr = ''
     for (let i = 0; i < string.length; i++) {
+        // Get the current letter from the input string
         const ele1 = string[i]
+        // Loop through all letters of the alphabet
         for (let j = 0; j < letters.length; j++) {
             const ele2 = letters[j]
             if(ele1 == ele2) {
-                let newIndex = j - Number(key.charAt(key.length - 1))
+                // If the letters match then subtract the key from index J then set that as the new index
+                let newIndex = j - Number(key)
                 if (newIndex < 0) newIndex = newIndex + letters.length
+                // Append that to the output string
                 outputStr += letters[newIndex]
+                // Break and start looking for the next letter
                 break;
             }
-            else if(j == letters.length-1) {outputStr += ele1; console.log('spchar')}
+            // If it didn't match then it must be a special character so just append the special character to the output string
+            else if(j == letters.length-1) outputStr += ele1
         }
     }
     idOutput.textContent = outputStr.toLowerCase();
@@ -66,9 +79,10 @@ function decrypt(iStr, key) {
 }
 
 /**
- * Function that gets a random int
+ * Function that gets a random int inclusive of min and max
  * 
- * From: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+ * Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+ * Accessed on 12/19/22
  * 
  * @param {number} min 
  * @param {number} max 
@@ -80,14 +94,22 @@ function getRandInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
   }
 
+/**
+ * Gives a random key 1-26
+ */
 function getRandKey(){
-    let key = `key${getRandInt(1, 26)}`
+    let key = `${getRandInt(1, 26)}`
     idSelectKey.value = key
 }
-  
+
+/**
+ * Toggles the instructions
+ */
 function toggleInstructions() {
     let txt = idInstructions.innerHTML
-    if (!txt) idInstructions.innerHTML = "Encrypt will make the input uppercase and Decrypt makes input lowercase. <br> More will be added later"
+    // If there's no instructions show them
+    if (!txt) idInstructions.innerHTML = "Type a string in the input and select a key<br>Press Encrypt to encrypt the string with a ceaser cipher using the selected key<br>Press Decrypt to decrypt the string with a ceaser cipher using the selected key"
+    // If there is hide them
     else idInstructions.innerHTML = ''
 }
 
