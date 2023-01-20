@@ -11,10 +11,11 @@
 <body>
     <h1>Ceaser Cipher</h1>
     <textarea name="" id="idInputText" cols="30" rows="10"></textarea><br><br>
-    Key:&nbsp; <select name="" id="idSelectKey">
-    </select><br><br>
+    Key:&nbsp; <select onchange="checkKey()" id="idSelectKey">
+    </select><br>
+    <input hidden=true type="text" id="idVigKey"><br>
     <button class="btn" onclick="encrypt(idInputText.value, idSelectKey.value)">Encrypt</button><button class="btn" onclick="decrypt(idInputText.value,idSelectKey.value)">Decrypt</button>
-    <button class="btn" onclick="getRandKey()">Pick Random Key</button> <button class="btn" onclick="toggleInstructions()">Instructions</button><br><br>
+    <button class="btn" onclick="getRandKey()">Pick Random Key</button> <button class="btn" onclick="toggleInstructions()">Instructions</button><br>
     <div id='idOutput' class="output"></div>
     <div id="idInstructions"></div>
 </body>
