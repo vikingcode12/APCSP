@@ -153,10 +153,12 @@ function vigEncrypt(iStr, key) {
             const ele2 = letters[j]
             if(ele1 == ele2) {
                 for (let k = 0; k < letters.length; k++) {
-                    console.log(key[i%3])
+                    // console.log(key[i%3])
                     if(key[i%3] == letters[k]) {
                         newIndex = j + k
                         // COMPLETE IT I ADDED THE INDEX!
+                        outputStr += letters[newIndex]
+                        console.log(letters[newIndex])
                     }
                 }
             }
