@@ -78,16 +78,16 @@ textarea{
     justify-self: center;
     transition: ease-in-out 200ms;
     position: relative;
-    background-color: #4a5361;
-    color: aquamarine;
+    background-color: #7a4343;
+    color: rgb(255, 127, 127);
     text-align: center;
     font-family: Noto Sans;
-    font-size: 40px;
+    font-size: 2rem;
     border-radius: 10px;
     inset: 0;
     border: none;
     cursor: pointer;
-    box-shadow: 0px 20px 25px 0px rgb(46, 82, 68);
+    box-shadow: 0px 10px 15px 0px rgb(82, 46, 46);
 }
 
 .btn::after{
@@ -100,24 +100,24 @@ textarea{
     inset: 0;
     border-radius: 10px;
     position: absolute;
-    box-shadow: 0px 10px 0px 0px rgb(46, 82, 68); 
+    box-shadow: 0px 10px 0px 0px rgb(82, 46, 46); 
 }
 
 
 .btn:hover{
-    background-color: #444b58;
+    background-color: #6e3d3d;
     transition: ease-in-out 200ms;
     transform: translate(0px, 8px);
-    box-shadow: 0 7px 20px 0px rgb(46, 82, 68);
+    box-shadow: 0 7px 20px 0px rgb(82, 46, 46);
 }
 
 .btn:hover::after{
     transition: ease-in-out 100ms;
-    box-shadow: 0px 7px 0px 0px rgb(46, 82, 68); 
+    box-shadow: 0px 7px 0px 0px rgb(82, 46, 46); 
 }
 
 .btn:active{
-    background-color: #353a44;
+    background-color: #443535;
     transition: ease-in-out 100ms;
     transform: translate(0px, 12px);
     box-shadow: 0 0px 0px 0px rgb(46, 82, 68);

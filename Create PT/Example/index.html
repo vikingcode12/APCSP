@@ -9,20 +9,31 @@
     <!-- Image of a heart -->
     <link rel="shortcut icon" href="./favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="./masterCSS.css">
+    <script src="./index.js"></script>
 </head>
 <body>
         <h1>Custom Valentine Generator</h1>
-        <!-- Image source: https://www.citypng.com/public/uploads/small/11643114601nrysovwtpmqmnl9nompp3otrfm81lzpopvwff8402u98ogiovdenu8rspvwdeg32s0hjpfohm8lx77eg1faxqlqgki0akjq3py8u.png -->
         <!-- Image of a heart with an arrow -->
+        <!--  -->
+        <!-- Date Accessed: 1/26/23 -->
+        <!-- Image source: https://www.citypng.com/public/uploads/small/11643114601nrysovwtpmqmnl9nompp3otrfm81lzpopvwff8402u98ogiovdenu8rspvwdeg32s0hjpfohm8lx77eg1faxqlqgki0akjq3py8u.png -->
+        <!-- Alternate Source: https://www.citypng.com/photo/21830/red-neon-heart-with-cupid-arrow-free-png -->
     <img src="./heart.png" width="300px"> <br>
     <p>This is a program that generates valentines for those you love! <br>
-        Andrew alsays gets a valentine with 4 random adjectives, Jean always gets a valentine with 8 random adjectives, and Nick always gets a Valentine with 8 random adjectives. You can also generate your own custom Valentine to a friend of your choice. If you use 8 or more adjectives, your friend will be classified as your best friend, and one of their adjetives will be replaced with heart emojis!
+        Andrew always gets a valentine with 4 random adjectives, Jean always gets a valentine with 8 random adjectives, and Nick always gets a Valentine with 8 random adjectives. You can also generate your own custom Valentine to a friend of your choice. If you use 8 or more adjectives, your friend will be classified as your best friend, and one of their adjetives will be replaced with heart emojis!
     </p>
     <select>
         <option value="Andrew">Andrew</option>
         <option value="Jean">Jean</option>
         <option value="Nick">Nick</option>
     </select>
+
+    <div id="idButtonContainer">
+        <button class="btn" onclick="getValentine()">Create Valentine</button>
+    </div>
+    <div id="idDivLetter">
+
+    </div>
     
 </body>
 </html>
