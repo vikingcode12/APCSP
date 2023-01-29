@@ -1,6 +1,7 @@
-var customName = '',
-customList = [],
-randomAdjectives = ["pretty", "kind", "stylish", "charismatic", "dilligent", "funny", "humble", "jovial", "compassionate", "ambitious", "helpful", "understanding"]
+const randomAdjectives = ["pretty", "kind", "stylish", "charismatic", "dilligent", "funny", "humble", "jovial", "compassionate", "ambitious", "helpful", "understanding"]
+var cName = "",
+cAdjList = []
+
 
 /**
  * Function that gets a random int inclusive of min and max
@@ -42,17 +43,26 @@ function generateRandomAdjectiveList(num, list=randomAdjectives) {
  * Function that returns the formatted l
  * 
  * @param {Array} list
+ * @param {Boolean} cList
  *  
  * @returns {String}
  */
-function formatList(list) {
+function formatList(list, cList=false) {
     let output = ''
     for (let i = 0; i < list.length; i++) {
-        if(i+1 == list.length) {
+        if (list.length < 2) {
+            output = list[i]
+            break;
+        }
+        else if(i+1 == list.length) {
             output += "and " + list[i];
             break;
         }
         output += list[i] + ", ";
+    }
+
+    if(cList == true){
+        output = "<span class=customList>" + output + "</span>"
     }
     return output;
 }
@@ -72,7 +82,7 @@ function composeValentine(list, recipient="John", sender="Anonymous") {
         list[getRandInt(0, list.length -1)] = "❤️❤️❤️"
         fStatus = "my best"
     }
-    let contents = `Dear ${recipient} Happy Valentines Day! On days like this we should lift others up instead of remembering how single and lonely we are... So here are some qualities that I like about you. You are ${formatList(list)}. Thank you for being ${fStatus} friend, <br>Sincerely, ${sender}`
+    let contents = `Dear ${recipient}, happy Valentines Day! On days like this we should lift others up instead of remembering how single and lonely we are... So here are some qualities that I like about you. You are ${formatList(list, idCustomList.checked)}. Thank you for being ${fStatus} friend, <br>Sincerely, ${sender}`
     return contents
 }
 
@@ -86,7 +96,50 @@ function getValentine(recipient=idRecipient.value) {
     if(recipient == "Andrew") adj = 4
     else if(recipient == "Jean") adj = 2
     else if(recipient == "Nick") adj = 8
-    let adjArr = generateRandomAdjectiveList(adj )
+    else if(recipient == "Custom") {
+        recipient = cName
+        if(idCustomList.checked) {
+            let adjArr = scrambleArr(cAdjList)
+            let valentine = composeValentine(adjArr, recipient)
+            idDivLetter.innerHTML = valentine
+            return
+        }
+        adj = idCAdjNum.value
+    }
+    let adjArr = generateRandomAdjectiveList(adj)
     let valentine = composeValentine(adjArr, recipient)
     idDivLetter.innerHTML = valentine
+}
+
+/**
+ * Saves the name in the cName variable and displays it for the user to check
+ * 
+ * @param {String} recipient 
+ */
+function saveName(recipient) {
+    idNameCheck.innerHTML = `Send To: <span class='customtomo'>${recipient}</span>`
+    cName = `<span class='customtomo'>${recipient}</span>`
+}
+
+/**
+ * Saves the adjective in the cAdjList variable and displays it for the user to check
+ * 
+ * @param {String} adj 
+ */
+function saveAdj(adj) {
+    idAdjectiveCheck.innerHTML += `<span class='customList'>${adj}</span><br>`
+    cAdjList.push(adj)
+}
+
+/**
+ * Scrambles the order of an array
+ * 
+ * @param {Array} array 
+ */
+function scrambleArr(array) {
+    for(let i = 0; i < array.length; i++) {
+        const randInt = getRandInt(0, array.length-1);
+        [array[i], array[randInt]] = [array[randInt], array[i]];
+    }
+    return array
 }

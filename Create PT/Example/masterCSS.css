@@ -32,7 +32,7 @@ body{
 
 h1{
     font-size: 3.125rem;
-    margin: 1%
+    margin: .5%
 }
 
 h2{
@@ -46,33 +46,63 @@ h3{
 p{
     margin: auto;
     margin-bottom: var(--border-length);
+    font-size: 1rem;
+    word-wrap: true;
+    width: 50%;
+}
+
+#idDivLetter{
+    margin: auto;
     font-size: 1.1rem;
     word-wrap: true;
     width: 50%;
 }
 
 input[type=text]{
-    width: 15%;
+    size: auto;
+    width: 7%;
     margin: 10px;
-    background-color: #282e36;
+    background-color: #460808;
     font-family: Noto sans;
     border-style: solid;
     border-radius: 10px;
-    border-color: white;
+    border: rgb(248, 192, 192) solid 2px;
+    text-align: center;
+    font-size: 20px;
+    color: whitesmoke;
+}
+
+input[type=number]{
+    size: auto;
+    width: 7%;
+    margin: 10px;
+    background-color: #460808;
+    font-family: Noto sans;
+    border-style: solid;
+    border-radius: 10px;
+    border: rgb(248, 192, 192) solid 2px;
     text-align: center;
     font-size: 20px;
     color: whitesmoke;
 }
 
 textarea{
-    margin-bottom: 15px;
-    font-family: Noto Sans;
+    margin: auto;
+    /* width: 7%; */
+    background-color: #460808;
+    font-family: Noto sans;
+    border-style: solid;
+    border-radius: 10px;
+    color:whitesmoke;
+    resize: none;
+    border: rgb(248, 192, 192) solid 2px;
+    text-align: center;
 }
 
 .btn{
     margin: auto;
-    margin-top: 50px;
-    margin-bottom: 50px;
+    margin-top: 25px;
+    margin-bottom: 25px;
     display: flex;
     align-self: flex-start;
     justify-self: center;
@@ -82,7 +112,7 @@ textarea{
     color: rgb(255, 127, 127);
     text-align: center;
     font-family: Noto Sans;
-    font-size: 2rem;
+    font-size: 1.6rem;
     border-radius: 10px;
     inset: 0;
     border: none;
@@ -146,4 +176,15 @@ div.root{
     height: 100%;
     width: 100%;
     padding: 10px;
+}
+
+span.customtomo {
+    font-size: 1.25rem;
+    color: rgb(255, 148, 148);
+    font-weight: bold;
+}
+span.customList{
+    color: rgb(255, 91, 91);
+    font-weight: bold;
+    font-style: italic;
 }

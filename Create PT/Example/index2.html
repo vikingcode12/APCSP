@@ -10,7 +10,7 @@
     <link rel="shortcut icon" href="./favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="./masterCSS.css">
     <!-- <script src="./index.js"></script> -->
-    <script defer src="./index1.js"></script>
+    <script defer src="./index2.js"></script>
 </head>
 <body>
         <h1>Custom Valentine Generator</h1>
@@ -31,12 +31,12 @@
     </select>
 
     <div id="idCustomInputs" hidden>
-        <input type="text" id="idCName" placeholder="Name"><br>
+        <input type="text" id="idCName" placeholder="Name"> <button onclick="saveName(idCName.value)">Save Name</button><br>
+        <span id="idNameCheck"></span><br>
         <input type="number" id="idCAdjNum" value="1">
-        <textarea hidden placeholder="Seperate with commas not spaces" id="idCAdjList" cols="50" rows="5"></textarea>
-        <br>
-        <br>
-        Use A Custom Adjective List: <input type="checkbox" id="idCustomList" onchange="if(this.checked) {idCAdjList.hidden = false; idCAdjNum.hidden = true} else {idCAdjList.hidden = true; idCAdjNum.hidden = false}">
+        <span id="idCListHolder" hidden><input type="text"  id="idCAdjList" placeholder="Adjective"> <button onclick="saveAdj(idCAdjList.value)">Save Adjective</button></span><br>
+        <span id="idAdjectiveCheck"></span>
+        Use A Custom Adjective List: <input type="checkbox" id="idCustomList" onchange="if(this.checked) {idCListHolder.hidden = false; idCAdjNum.hidden = true} else {idCListHolder.hidden = true; idCAdjNum.hidden = false}">
     </div>
 
     <div id="idButtonContainer">
