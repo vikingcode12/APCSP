@@ -10,9 +10,9 @@
 /* override browser default */
 html,
 body {
-  margin: var(--body-margin);
-  padding: 0;
-  height: calc(100% - var(--border-length) - 2 * var(--body-margin));
+    margin: var(--body-margin);
+    padding: 0;
+    height: max(calc(100% - var(--border-length) - 2 * var(--body-margin)));
 }
 
 img{
@@ -31,7 +31,7 @@ body{
 }
 
 h1{
-    font-size: 3.125rem;
+    font-size: 1.725rem;
     margin: .5%
 }
 
@@ -48,7 +48,7 @@ p{
     margin-bottom: var(--border-length);
     font-size: 1rem;
     word-wrap: true;
-    width: 50%;
+    width: 70%;
 }
 
 #idDivLetter{

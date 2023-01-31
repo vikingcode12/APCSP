@@ -48,17 +48,9 @@ function generateRandomAdjectiveList(num, list=randomAdjectives) {
  * @returns {String}
  */
 function formatList(list, cList=false) {
-    let output = ''
+    let output = '<br>'
     for (let i = 0; i < list.length; i++) {
-        if (list.length < 2) {
-            output = list[i]
-            break;
-        }
-        else if(i+1 == list.length) {
-            output += "and " + list[i];
-            break;
-        }
-        output += list[i] + ", ";
+        output += list[i] + "<br>";
     }
 
     if(cList == true){
@@ -77,12 +69,12 @@ function formatList(list, cList=false) {
  * @returns {String}
  */
 function composeValentine(list, recipient="John", sender="Anonymous") {
-    let fStatus = 'a nice'
+    let fStatus = '<span class=customList>a nice</span>'
     if (list.length > 5) {
         list[getRandInt(0, list.length -1)] = "❤️❤️❤️"
-        fStatus = "my best"
+        fStatus = "<span class=customList>my best</span>"
     }
-    let contents = `Dear ${recipient}, happy Valentines Day! On days like this we should lift others up instead of remembering how single and lonely we are... So here are some qualities that I like about you. You are ${formatList(list, idCustomList.checked)}. Thank you for being ${fStatus} friend, <br>Sincerely, ${sender}`
+    let contents = `Dear ${recipient}, happy Valentines Day! On days like this we should lift others up. So here are some qualities that I like about you. You are ${formatList(list, idCustomList.checked)} Thank you for being ${fStatus} friend, <br>Sincerely, ${sender}`
     return contents
 }
 
@@ -102,6 +94,10 @@ function getValentine(recipient=idRecipient.value) {
             let adjArr = scrambleArr(cAdjList)
             let valentine = composeValentine(adjArr, recipient)
             idDivLetter.innerHTML = valentine
+            cName = ""
+            cAdjList = []
+            idNameCheck.innerHTML = ""
+            idAdjectiveCheck.innerHTML = ""
             return
         }
         adj = idCAdjNum.value
