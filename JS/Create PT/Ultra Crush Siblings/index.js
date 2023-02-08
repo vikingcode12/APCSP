@@ -1,5 +1,12 @@
 import { sleep } from "./utility.js";
 
+class GAME {
+    constructor(ctx=ctx, width=cWidth, height=cHeight) {
+
+    }
+
+}
+
 /**
  * Function that gets a random int inclusive of min and max
  * 
@@ -20,18 +27,20 @@ function getRandInt(min, max) {
 const c = myCanvas;
 
 const cWidth = c.offsetWidth; 
-const cHeight = c.offsetHeight; 
+const cHeight = c.offsetHeight;
+// Update this to match the CSS width and height of the canvas
+c.width = cWidth;
+c.height = cHeight;
 const ctx = c.getContext("2d");
 // Control how often the game updates so there won't be an issue on high refresh rate monitors
 const tps = 2
 
 function update() {
-    console.log(c.width, c.height);
     let r = getRandInt(0, 255);
     let g = getRandInt(0, 255);
     let b = getRandInt(0, 255);
-
-    ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 1)`
+    
+    ctx.fillStyle = `rgb(${r}, ${g}, ${b})`
     setTimeout(() => {
         update();
     }, 1000 / tps);
@@ -39,9 +48,10 @@ function update() {
 
 function drawFrame(){
     ctx.clearRect(0, 0, cWidth, cHeight);
-    ctx.fillRect(0, 0, cWidth, cHeight);
+    ctx.fillRect(0, 0, cWidth-100, cHeight);
     requestAnimationFrame(drawFrame);
 }
 
+console.log(c.width, c.height);
 update();
 drawFrame();
