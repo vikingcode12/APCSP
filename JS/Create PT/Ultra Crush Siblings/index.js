@@ -1,13 +1,6 @@
 import { sleep } from "./utility.js";
 import * as fighters from "./fighters.js"
 
-class GAME {
-    constructor(ctx=ctx, width=cWidth, height=cHeight) {
-
-    }
-
-}
-
 /** @type {HTMLCanvasElement} */ 
 const c = myCanvas;
 
@@ -21,12 +14,31 @@ const ctx = c.getContext("2d");
 // Control how often the game updates so there won't be an issue on high refresh rate monitors
 const tps = 60
 
+var curkeys = []
+var newkeys = [];
+
 const testChar = new fighters.fighter("test")
 
+/**
+ * Function that dictates movement of the player character based on user input
+ */
+function checkMovement(){
+    if(curkeys[65]) testChar.moveX(-1)    
+    else if(curkeys[68]) testChar.moveX(1)
+    else testChar.moveX(0) 
+    if(newkeys[32]) testChar.jump()
+}
+
 function update() {
+    checkMovement()
     testChar.update()
 
 
+
+
+    for (let i = 0; i < newkeys.length; i++) {
+        newkeys[i] = false;
+    }
     setTimeout(() => {
         update();
     }, 1000 / tps);
@@ -42,14 +54,22 @@ function drawFrame(){
 }
 
 function init() {
-    // CITATION
+    // This segment of code allows me to collect keyboard inputs from the user
     // Source: Teacher
+    // Accessed on 2/9/23
     window.addEventListener('keydown', function(e){ if(!curkeys[e.keyCode]){
         curkeys[e.keyCode] = true; 
         newkeys[e.keyCode] = true;}})
         window.addEventListener('keyup', function(e){ curkeys[e.keyCode] = false;})
-        
+    
+    ctx.imageSmoothingEnabled = false;
+    ctx.webkitImageSmoothingEnabled = false;
+
+
+
     console.log(c.width, c.height);
     update();
     drawFrame();
 }
+
+init();
