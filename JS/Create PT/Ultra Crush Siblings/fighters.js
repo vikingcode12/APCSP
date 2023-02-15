@@ -30,7 +30,9 @@ export class fighter {
      * @param {Number} width 
      * @param {Number} height 
      */
-    constructor(src, spW=32, spH=48, x = cWidth/2, y = 0, width = 17.58, height = 6.25) {
+    constructor(src, spW=64, spH=64, x = cWidth/2, y = 0, width = 15, height = 8.5) {
+
+        this.scale = 1.5
 
         this.img = new Image();
         if(Array.isArray(src)){
@@ -39,11 +41,15 @@ export class fighter {
         }
         else this.img.src = path + src;
         
+        this.offsetHeight = 0;
+        this.offsetWidth = 20;
+        
         this.x = x;
         this.y = y;
         
         this.velocity = [0, 0] // [vx, vy]
         this.maxSpeed = 10
+        this.jumpForce = 10
         this.grounded = false;
         
         this.width = cWidth/width;
@@ -54,9 +60,18 @@ export class fighter {
 
         this.health = 100;
 
-        this.maxFrameNum = 5
+        this.maxFrameNum = 1
         this.frameNum = 0
         this.gameFrame = 0
+
+        this.animation = 8-1
+
+        this.alive = true;
+        this.hurt = false;
+        this.moving = false;
+        this.attacking = false;
+        this.falling = false;
+
     }
 
 
@@ -64,13 +79,15 @@ export class fighter {
         this.applyGravity()
         this.gameFrame++
 
+        this.checkState()
+
         this.animate()
         
         this.x += this.velocity[0];
         this.y += this.velocity[1];
         if(this.y == cHeight - this.height) this.grounded = true
         else this.grounded = false
-        console.log(this.grounded)
+
     }
 
     /**
@@ -90,17 +107,8 @@ export class fighter {
      */
     draw(ctx) {
         ctx.fillStyle = "black";
-        ctx.drawImage(this.img, 0, this.frameNum*this.spriteHeight, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width*1.5, this.height);
+        ctx.drawImage(this.img, this.frameNum*this.spriteWidth, this.animation*this.spriteHeight, this.spriteWidth, this.spriteHeight, this.x-this.offsetWidth, this.y+this.offsetHeight, this.spriteWidth*this.scale, this.spriteHeight*this.scale);
 
-    }
-
-    animate(){
-
-
-        // This is the general idea of animation
-        if(this.gameFrame % staggerFrame != 0) return;
-        this.frameNum++
-        if (this.frameNum > this.maxFrameNum) this.frameNum = 0
     }
 
     applyGravity(){
@@ -146,6 +154,60 @@ export class fighter {
 
     jump() {
         if(!this.grounded) return
-        this.velocity[1] = -10;
+        this.velocity[1] = -this.jumpForce;
+    }
+}
+
+export class purple_arrow extends fighter {
+    constructor(src, spW=64, spH=64, x = cWidth/2, y = 0, width = 16, height = 9) {
+        super(src, spW, spH, x, y, width, height)
+        this.scale = 1.5
+        
+        this.offsetHeight = -5;
+        this.offsetWidth = 20;
+        
+        
+        this.maxSpeed = 10
+        this.jumpForce = 10
+
+        this.health = 100;
+
+        this.maxFrameNum = 7
+        this.frameNum = 0
+        this.gameFrame = 0
+
+        this.animation = 0
+
+        this.alive = true;
+        this.hurt = false;
+        this.moving = false;
+        this.attacking = false;
+        this.falling = false;
+    }
+
+    checkState() {
+        if(this.health > 0) this.alive = true
+        if(this.velocity[1] != 0) this.falling = true
+        else this.falling = false
+
+    }
+
+    animate(){
+
+
+        // This is the general idea of animation
+        if(this.gameFrame % staggerFrame != 0) return;
+        this.frameNum++
+        if (this.frameNum > this.maxFrameNum) {
+            this.frameNum = 0
+            if(this.falling) {
+                let vy = this.velocity[1]
+                if(vy <= 0 && this.animation != 6) {
+                    this.animation = 6
+                    this
+                }
+                else if(vy >= 0 && this.animation!= 7) this.animation = 7
+            }
+        }
     }
 }

@@ -17,7 +17,7 @@ const tps = 60
 var curkeys = []
 var newkeys = [];
 
-const testChar = new fighters.fighter(["witch/B_witch_idle.png", "witch/B_witch_run.png", "witch/B_witch_attack.png", "witch/B_witch_charge.png", "witch/B_witch_take_damage.png", "witch/B_witch_death.png"])
+const testChar = new fighters.purple_arrow("purple_arrow/spritesheet.png")
 
 /**
  * Function that dictates movement of the player character based on user input
@@ -34,8 +34,6 @@ function update() {
     testChar.update()
 
 
-
-
     for (let i = 0; i < newkeys.length; i++) {
         newkeys[i] = false;
     }
@@ -48,6 +46,7 @@ function drawFrame(){
     // Clear the canvas each frame
     ctx.clearRect(0, 0, cWidth, cHeight);
 
+    testChar.drawHitboxes(ctx);
     testChar.draw(ctx);
 
     requestAnimationFrame(drawFrame);
