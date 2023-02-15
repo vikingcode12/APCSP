@@ -204,7 +204,7 @@ export class purple_arrow extends fighter {
                 let vy = this.velocity[1]
                 if(vy <= 0 && this.animation != 6) {
                     this.animation = 6
-                    this.ma
+                    this.
                 }
                 else if(vy >= 0 && this.animation!= 7) this.animation = 7
             }
