@@ -48,6 +48,7 @@ export class fighter {
         this.y = y;
         
         this.velocity = [0, 0] // [vx, vy]
+        this.direction = 0;
         this.maxSpeed = 10
         this.jumpForce = 10
         this.grounded = false;
@@ -107,7 +108,8 @@ export class fighter {
      */
     draw(ctx) {
         ctx.fillStyle = "black";
-        ctx.drawImage(this.img, this.frameNum*this.spriteWidth, this.animation*this.spriteHeight, this.spriteWidth, this.spriteHeight, this.x-this.offsetWidth, this.y+this.offsetHeight, this.spriteWidth*this.scale, this.spriteHeight*this.scale);
+        if() //Draw the correct orientation
+        ctx.drawImage(this.img, (this.frameNum-1)*this.spriteWidth, (this.animation-1)*this.spriteHeight, this.spriteWidth, this.spriteHeight, this.x-this.offsetWidth, this.y+this.offsetHeight, this.spriteWidth*this.scale, this.spriteHeight*this.scale);
 
     }
 
@@ -127,6 +129,7 @@ export class fighter {
      * @param {Number} direction 1, -1 or 0
      */
     moveX(direction = 0) {
+        this.direction = direction;
         if(direction == 0) {
             // Apply friction to slow the fighter in a sort of natural way
             if(this.velocity[0] == 1 || this.velocity[0] == -1) this.velocity[0] = 0
@@ -187,27 +190,92 @@ export class purple_arrow extends fighter {
 
     checkState() {
         if(this.health > 0) this.alive = true
-        if(this.velocity[1] != 0) this.falling = true
-        else this.falling = false
 
     }
 
+    // Code to manage current animation and animation frame.
+    // Author: Me
+    // Source: characters.js 
+    // Accessed on 2/16/23
     animate(){
-
-
-        // This is the general idea of animation
-        if(this.gameFrame % staggerFrame != 0) return;
-        this.frameNum++
-        if (this.frameNum > this.maxFrameNum) {
-            this.frameNum = 0
-            if(this.falling) {
-                let vy = this.velocity[1]
-                if(vy <= 0 && this.animation != 6) {
-                    this.animation = 6
-                    this.
-                }
-                else if(vy >= 0 && this.animation!= 7) this.animation = 7
+         //Staggers the frames so the animations don't play too fast
+         if(this.gameFrame % staggerFrame != 0) return;
+         //Animates next frame if there is another frame otherwise start over from first frame
+         if(this.frameNum < this.maxFrameNum) this.frameNum++;
+         else{
+             //Checks if the character lost because then there is no need to update animations
+             if(!this.alive) return;
+             this.frameNum = 1
+         }
+         //Eveything below handles a majority of the animation logic
+ 
+         //Checks if the conditions are met runs the animation then returns otherwise 
+         if(this.health <= 0){
+             if(!this.alive) this.frameNum = 0;
+             this.animation = 2;
+             this.totalFrames = 8;
+             this.alive = false;
+             return
+         }
+         //Attacked Animations
+         else if(this.hurt){
+             this.totalFrames = 3;
+             this.animation = 15;
+             if(this.frameNum == this.totalFrames) this.hurt = false;
+             return
+         }
+         
+         if(this.attacking) {
+             if(this.frameNum == this.damageFrame){
+                 if(this.isPlayer) this.attackLogicPlayer()
+                 else this.attackLogicCPU()
+                 if(this.currentAttack == 1) this.damageFrame = 5;
+             }
+             if(this.frameNum == this.totalFrames) {
+                 if(this.currentAttack == 1) {
+                     util.sleep(400).then(() => {
+                         this.canAttack1 = true;
+                     })
+                 }
+                 else if(this.currentAttack == 2) {
+                     util.sleep(1700).then(() => {
+                         this.canAttack2 = true;
+                     })
+                 }
+                     this.attacking = false;
+                     this.currentAttack = 0;
+             }
+             return;
+         }
+         
+         else if(!this.grounded){
+            let vy = this.velocity[1]
+            console.log("AIR")
+            if(vy <= 0 && this.animation != 5) {
+                this.animation = 5
+                this.maxFrameNum = 6
             }
-        }
+            else if(vy > 0 && this.animation!= 5) {
+                this.animation = 5
+                this.maxFrameNum = 2
+                if(this.frameNum > this.maxFrameNum) this.frameNum = 1
+            }
+            if(this.frameNum > this.maxFrameNum) this.frameNum = 1
+            return
+         }
+         
+         else if(this.velocity[0] != 0){
+             this.animation = 1;
+             this.maxFrameNum = 8;
+             if(this.frameNum > this.maxFrameNum) this.frameNum = 1
+             return
+            }
+            
+            else{
+             this.animation = 6
+             this.maxFrameNum = 4;
+             if(this.frameNum > this.maxFrameNum) this.frameNum = 1
+             return;
+         }
     }
 }
