@@ -107,8 +107,22 @@ export class fighter {
      * @param {CanvasRenderingContext2D} ctx 
      */
     draw(ctx) {
-        ctx.fillStyle = "black";
-        if(this.direction == -1) return //Draw the correct orientation
+        if(this.direction == -1) {
+            //This all essentially flips the image
+    
+            //Translates to the images position
+            ctx.translate(this.x,this.y);
+            
+            // scaleX by -1; this "trick" flips horizontally
+            ctx.scale(-1,1);
+            
+            // draw the img
+            // no need for x,y since we've already translated
+            ctx.drawImage(this.img, (this.frameNum-1)*this.spriteWidth, (this.animation-1)*this.spriteHeight, this.spriteWidth, this.spriteHeight, -this.spriteWidth*this.scale /*Compensates for flip */, 0, this.spriteWidth*this.scale, this.spriteHeight*this.scale);
+            
+            // always clean up -- reset transformations to default
+            ctx.setTransform(1,0,0,1,0,0);
+        }
         else {
             ctx.drawImage(this.img, (this.frameNum-1)*this.spriteWidth, (this.animation-1)*this.spriteHeight, this.spriteWidth, this.spriteHeight, this.x-this.offsetWidth, this.y+this.offsetHeight, this.spriteWidth*this.scale, this.spriteHeight*this.scale);
         }
@@ -130,7 +144,9 @@ export class fighter {
      * @param {Number} direction 1, -1 or 0
      */
     moveX(direction = 0) {
-        this.direction = direction;
+        if (direction != 0){
+            this.direction = direction;
+        }
         if(direction == 0) {
             // Apply friction to slow the fighter in a sort of natural way
             if(this.velocity[0] == 1 || this.velocity[0] == -1) this.velocity[0] = 0
@@ -187,6 +203,33 @@ export class purple_arrow extends fighter {
         this.moving = false;
         this.attacking = false;
         this.falling = false;
+    }
+    
+    /**
+     * Draw the fighter on the canvas
+     *  
+     * @param {CanvasRenderingContext2D} ctx 
+     */
+    draw(ctx) {
+        if(this.direction == -1 || (!this.grounded && this.direction == 1)) {
+            //This all essentially flips the image
+    
+            //Translates to the images position
+            ctx.translate(this.x,this.y);
+            
+            // scaleX by -1; this "trick" flips horizontally
+            ctx.scale(-1,1);
+            
+            // draw the img
+            // no need for x,y since we've already translated
+            ctx.drawImage(this.img, (this.frameNum-1)*this.spriteWidth, (this.animation-1)*this.spriteHeight, this.spriteWidth, this.spriteHeight, -this.spriteWidth*this.scale /*Compensates for flip */, 0, this.spriteWidth*this.scale, this.spriteHeight*this.scale);
+            
+            // always clean up -- reset transformations to default
+            ctx.setTransform(1,0,0,1,0,0);
+        }
+        else if (this.direction == 1 || (!this.grounded && this.direction == -1)) {
+            ctx.drawImage(this.img, (this.frameNum-1)*this.spriteWidth, (this.animation-1)*this.spriteHeight, this.spriteWidth, this.spriteHeight, this.x-this.offsetWidth, this.y+this.offsetHeight, this.spriteWidth*this.scale, this.spriteHeight*this.scale);
+        }
     }
 
     checkState() {
