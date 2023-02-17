@@ -53,6 +53,7 @@ export class fighter {
         this.maxSpeed = 10
         this.jumpForce = 10
         this.grounded = false;
+        this.hasDoubleJump = false
         
         this.width = cWidth/width;
         this.height = cHeight/height;
