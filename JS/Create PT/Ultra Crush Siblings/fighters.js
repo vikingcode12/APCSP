@@ -1,4 +1,5 @@
 // Witch: https://9e0.itch.io/witches-pack
+// FIND CITATION FOR THE ARCHER SPRITE PLS
 
 
 /** @type {HTMLCanvasElement} */ 
@@ -12,7 +13,7 @@ const path = "./assets/fighters/";
 
 const gravity = 0.4;
 const friction = 3;
-const ground = 0
+const ground = 0;
 
 
 const staggerFrame = 5;
@@ -48,7 +49,7 @@ export class fighter {
         this.y = y;
         
         this.velocity = [0, 0] // [vx, vy]
-        this.direction = 0;
+        this.direction = 1;
         this.maxSpeed = 10
         this.jumpForce = 10
         this.grounded = false;
@@ -86,7 +87,7 @@ export class fighter {
         
         this.x += this.velocity[0];
         this.y += this.velocity[1];
-        if(this.y == cHeight - this.height) this.grounded = true
+        if(this.y == cHeight - ground - this.height) this.grounded = true
         else this.grounded = false
 
     }
@@ -129,11 +130,11 @@ export class fighter {
     }
 
     applyGravity(){
-        if( this.y < cHeight - this.height) this.velocity[1] += gravity;
+        if( this.y < cHeight-ground - this.height) this.velocity[1] += gravity;
         else {
             if(this.velocity[1] > 0){
                 this.velocity[1] = 0;
-                this.y = cHeight-this.height;
+                this.y = cHeight - ground-this.height;
             }
         }
     }
@@ -211,7 +212,7 @@ export class purple_arrow extends fighter {
      * @param {CanvasRenderingContext2D} ctx 
      */
     draw(ctx) {
-        if(this.direction == -1 || (!this.grounded && this.direction == 1)) {
+        if(this.direction == -1 && this.grounded || (!this.grounded && this.direction == 1)) {
             //This all essentially flips the image
     
             //Translates to the images position
@@ -227,9 +228,25 @@ export class purple_arrow extends fighter {
             // always clean up -- reset transformations to default
             ctx.setTransform(1,0,0,1,0,0);
         }
-        else if (this.direction == 1 || (!this.grounded && this.direction == -1)) {
+        else if (this.direction == 1 && this.grounded || (!this.grounded && this.direction == -1)) {
             ctx.drawImage(this.img, (this.frameNum-1)*this.spriteWidth, (this.animation-1)*this.spriteHeight, this.spriteWidth, this.spriteHeight, this.x-this.offsetWidth, this.y+this.offsetHeight, this.spriteWidth*this.scale, this.spriteHeight*this.scale);
+            console.log(!this.grounded && this.direction == -1)
         }
+    }
+
+    ability1() {
+        
+    }
+    
+    ability2() {
+
+    }
+
+    collides(enemy, range) {
+        if (range.x < enemy.x + enemy.width && range.x + range.width > enemy.x && range.y < enemy.y + enemy.height && range.y + range.height > enemy.y) {
+            return true;
+        }
+        return false;
     }
 
     checkState() {
@@ -294,7 +311,6 @@ export class purple_arrow extends fighter {
          
          else if(!this.grounded){
             let vy = this.velocity[1]
-            console.log("AIR")
             if(vy <= 0 && this.animation != 5) {
                 this.animation = 5
                 this.maxFrameNum = 6
