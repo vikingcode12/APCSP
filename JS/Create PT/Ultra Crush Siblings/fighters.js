@@ -108,7 +108,7 @@ export class fighter {
      */
     draw(ctx) {
         ctx.fillStyle = "black";
-        if(this.direction == -1) //Draw the correct orientation
+        if(this.direction == -1) return //Draw the correct orientation
         else {
             ctx.drawImage(this.img, (this.frameNum-1)*this.spriteWidth, (this.animation-1)*this.spriteHeight, this.spriteWidth, this.spriteHeight, this.x-this.offsetWidth, this.y+this.offsetHeight, this.spriteWidth*this.scale, this.spriteHeight*this.scale);
         }

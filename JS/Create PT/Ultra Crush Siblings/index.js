@@ -46,7 +46,7 @@ function drawFrame(){
     // Clear the canvas each frame
     ctx.clearRect(0, 0, cWidth, cHeight);
 
-    testChar.drawHitboxes(ctx);
+    // testChar.drawHitboxes(ctx);
     testChar.draw(ctx);
 
     requestAnimationFrame(drawFrame);

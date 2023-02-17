@@ -40,8 +40,10 @@ canvas{
 
 #myCanvas{
     /* Relative as possible so it works on many devices */
-    width: 46.875vw;
-    height: 61.538461538vh;
+    /* width: 46.875vw; */
+    /* height: 61.538461538vh; */
+    width:1200px;
+    height:600px;
 
     scale:1.1
 }
