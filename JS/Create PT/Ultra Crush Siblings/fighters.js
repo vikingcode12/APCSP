@@ -1,3 +1,5 @@
+import {sleep} from "./utility.js" 
+
 // Witch: https://9e0.itch.io/witches-pack
 // FIND CITATION FOR THE ARCHER SPRITE PLS
 
@@ -173,7 +175,35 @@ export class fighter {
             this.x = cWidth-this.width
         }
     }
+    moveX(direction = 0) {
+        if (direction != 0){
+            this.direction = direction;
+        }
+        if(direction == 0) {
+            // Apply friction to slow the fighter in a sort of natural way
+            if(this.velocity[0] == 1 || this.velocity[0] == -1) this.velocity[0] = 0
+            if(this.velocity[0] > 0) this.velocity[0] -= friction
+            else if(this.velocity[0] < 0) this.velocity[0] += friction
+        }
 
+        if (direction == 1 && this.velocity[0] < 0) this.velocity[0] = 0 
+        else if (direction == -1 && this.velocity[0] > 0) this.velocity[0] = 0
+
+        this.velocity[0] += direction * 1;
+        
+        if(this.velocity[0] > this.maxSpeed) this.velocity[0] = this.maxSpeed;
+        else if(this.velocity[0] < -this.maxSpeed) this.velocity[0] = -this.maxSpeed;
+        
+        if(this.x + this.velocity[0] < 0) {
+            this.velocity[0] = 0
+            this.x = 0
+        }
+        else if(this.x + this.width + this.velocity[0] > cWidth) {
+            this.velocity[0] = 0
+            this.x = cWidth-this.width
+        }
+    }
+    
     jump() {
         if(!this.grounded) return
         this.velocity[1] = -this.jumpForce;
@@ -191,15 +221,15 @@ export class purple_arrow extends fighter {
         
         this.maxSpeed = 10
         this.jumpForce = 10
-
+        
         this.health = 100;
-
+        
         this.maxFrameNum = 7
         this.frameNum = 0
         this.gameFrame = 0
-
+        
         this.animation = 0
-
+        
         this.alive = true;
         this.hurt = false;
         this.moving = false;
@@ -207,13 +237,42 @@ export class purple_arrow extends fighter {
         this.falling = false;
     }
     
+    moveX(direction = 0) {
+        if (direction != 0){
+            this.direction = direction;
+        }
+        if(direction == 0) {
+            // Apply friction to slow the fighter in a sort of natural way
+            if(this.velocity[0] == 1 || this.velocity[0] == -1) this.velocity[0] = 0
+            if(this.velocity[0] > 0) this.velocity[0] -= friction
+            else if(this.velocity[0] < 0) this.velocity[0] += friction
+        }
+    
+        if (direction == 1 && this.velocity[0] < 0) this.velocity[0] = 0 
+        else if (direction == -1 && this.velocity[0] > 0) this.velocity[0] = 0
+    
+        this.velocity[0] += direction * 1;
+        
+        if(this.velocity[0] > this.maxSpeed && this.attacking != "ability2") this.velocity[0] = this.maxSpeed;
+        else if(this.velocity[0] < -this.maxSpeed && his.attacking != "ability2") this.velocity[0] = -this.maxSpeed;
+        
+        if(this.x + this.velocity[0] < 0) {
+            this.velocity[0] = 0
+            this.x = 0
+        }
+        else if(this.x + this.width + this.velocity[0] > cWidth) {
+            this.velocity[0] = 0
+            this.x = cWidth-this.width
+        }
+    }
+
     /**
      * Draw the fighter on the canvas
      *  
      * @param {CanvasRenderingContext2D} ctx 
      */
     draw(ctx) {
-        if(this.direction == -1 && this.grounded || (!this.grounded && this.direction == 1)) {
+        if((this.direction == -1 && this.animation!= 5) || (this.direction == 1 && this.animation == 5)) {
             //This all essentially flips the image
     
             //Translates to the images position
@@ -229,17 +288,30 @@ export class purple_arrow extends fighter {
             // always clean up -- reset transformations to default
             ctx.setTransform(1,0,0,1,0,0);
         }
-        else if (this.direction == 1 && this.grounded || (!this.grounded && this.direction == -1)) {
+        else if ((this.direction == 1 && this.animation!= 5) || (this.direction == -1 && this.animation == 5)) {
             ctx.drawImage(this.img, (this.frameNum-1)*this.spriteWidth, (this.animation-1)*this.spriteHeight, this.spriteWidth, this.spriteHeight, this.x-this.offsetWidth, this.y+this.offsetHeight, this.spriteWidth*this.scale, this.spriteHeight*this.scale);
             console.log(!this.grounded && this.direction == -1)
         }
     }
 
+    shield() {
+        this.velocity[0] = 0  
+    }
+
     ability1() {
-        
+        this.velocity[0] = 0
+        this.attacking = "ability1"
+        sleep(1000).then(() => {
+            this.attacking = false
+        })
     }
     
     ability2() {
+        this.velocity[0] = this.velocity[0] * 1.5
+        this.attacking = "ability2"
+        sleep(1000).then(() => {
+            this.attacking = false
+        })
 
     }
 
@@ -288,33 +360,42 @@ export class purple_arrow extends fighter {
          }
          
          if(this.attacking) {
-             if(this.frameNum == this.damageFrame){
-                 if(this.isPlayer) this.attackLogicPlayer()
-                 else this.attackLogicCPU()
-                 if(this.currentAttack == 1) this.damageFrame = 5;
-             }
-             if(this.frameNum == this.totalFrames) {
-                 if(this.currentAttack == 1) {
-                     util.sleep(400).then(() => {
-                         this.canAttack1 = true;
-                     })
-                 }
-                 else if(this.currentAttack == 2) {
-                     util.sleep(1700).then(() => {
-                         this.canAttack2 = true;
-                     })
-                 }
-                     this.attacking = false;
-                     this.currentAttack = 0;
+            if (this.attacking == "ability1") {
+                this.animation = 4
+                this.maxFrameNum = 7
+            }
+            else if (this.attacking == "ability2") {
+                this.animation = 3
+                this.maxFrameNum = 7
+                this.velocity[0] = this.velocity[0] * 1.5
+            }
+            if(this.frameNum == this.damageFrame){
+                if(this.isPlayer) this.attackLogicPlayer()
+                else this.attackLogicCPU()
+                if(this.currentAttack == 1) this.damageFrame = 5;
+            }
+            if(this.frameNum == this.totalFrames) {
+                if(this.currentAttack == 1) {
+                    util.sleep(400).then(() => {
+                        this.canAttack1 = true;
+                    })
+                }
+                else if(this.currentAttack == 2) {
+                    util.sleep(1700).then(() => {
+                        this.canAttack2 = true;
+                    })
+                }
+                    this.attacking = false;
+                    this.currentAttack = 0;
              }
              return;
          }
          
          else if(!this.grounded){
             let vy = this.velocity[1]
-            if(vy <= 0 && this.animation != 5) {
-                this.animation = 5
-                this.maxFrameNum = 6
+            if(vy <= 0 && this.animation != 7) {
+                this.animation = 7
+                this.maxFrameNum = 4
             }
             else if(vy > 0 && this.animation!= 5) {
                 this.animation = 5

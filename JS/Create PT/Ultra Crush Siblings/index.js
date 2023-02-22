@@ -27,6 +27,9 @@ function checkMovement(){
     else if(curkeys[68]) testChar.moveX(1)
     else testChar.moveX(0) 
     if(newkeys[32]) testChar.jump()
+    else if (curkeys[74]) testChar.shield()
+    else if(newkeys[75]) testChar.ability1()
+    else if (newkeys[76]) testChar.ability2()
 }
 
 function update() {
