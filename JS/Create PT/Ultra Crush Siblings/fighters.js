@@ -21,6 +21,23 @@ const ground = 0;
 const staggerFrame = 5;
 
 
+const SHIELD = new Image()
+SHIELD.src = "./assets/shield.png"
+
+class projectile {
+    constructor(img, x=0, y=0, sx=50, direction=1) {
+        this.img = img;
+        this.x = x;
+        this.y = y;
+        this.speedX = sx;
+        this.dir = direction;
+    }
+
+    draw(){
+        
+    }
+}
+
 
 // General fighter class the other fighters will inherit
 export class fighter {
@@ -55,7 +72,7 @@ export class fighter {
         this.maxSpeed = 10
         this.jumpForce = 10
         this.grounded = false;
-        this.hasDoubleJump = false
+        this.hasDoubleJump = true
         
         this.width = cWidth/width;
         this.height = cHeight/height;
@@ -63,7 +80,7 @@ export class fighter {
         this.spriteWidth = spW;
         this.spriteHeight = spH;
 
-        this.health = 100;
+        this.damage = 0;
 
         this.maxFrameNum = 1
         this.frameNum = 0
@@ -83,6 +100,7 @@ export class fighter {
     update() {
         this.applyGravity()
         this.gameFrame++
+
 
         this.checkState()
 
@@ -138,8 +156,15 @@ export class fighter {
             if(this.velocity[1] > 0){
                 this.velocity[1] = 0;
                 this.y = cHeight - ground-this.height;
+                this.hasDoubleJump = true;
             }
         }
+    }
+
+    shield() {
+        if(!this.grounded) return
+        this.velocity[0] = 0 
+        this.shielding = true
     }
     
     /**
@@ -175,37 +200,10 @@ export class fighter {
             this.x = cWidth-this.width
         }
     }
-    moveX(direction = 0) {
-        if (direction != 0){
-            this.direction = direction;
-        }
-        if(direction == 0) {
-            // Apply friction to slow the fighter in a sort of natural way
-            if(this.velocity[0] == 1 || this.velocity[0] == -1) this.velocity[0] = 0
-            if(this.velocity[0] > 0) this.velocity[0] -= friction
-            else if(this.velocity[0] < 0) this.velocity[0] += friction
-        }
-
-        if (direction == 1 && this.velocity[0] < 0) this.velocity[0] = 0 
-        else if (direction == -1 && this.velocity[0] > 0) this.velocity[0] = 0
-
-        this.velocity[0] += direction * 1;
-        
-        if(this.velocity[0] > this.maxSpeed) this.velocity[0] = this.maxSpeed;
-        else if(this.velocity[0] < -this.maxSpeed) this.velocity[0] = -this.maxSpeed;
-        
-        if(this.x + this.velocity[0] < 0) {
-            this.velocity[0] = 0
-            this.x = 0
-        }
-        else if(this.x + this.width + this.velocity[0] > cWidth) {
-            this.velocity[0] = 0
-            this.x = cWidth-this.width
-        }
-    }
     
     jump() {
-        if(!this.grounded) return
+        if(!this.grounded && !this.hasDoubleJump || this.shielding) return
+        if(this.hasDoubleJump && !this.grounded) this.hasDoubleJump = false
         this.velocity[1] = -this.jumpForce;
     }
 }
@@ -215,6 +213,9 @@ export class purple_arrow extends fighter {
         super(src, spW, spH, x, y, width, height)
         this.scale = 1.5
         
+        this.arrow = new Image()
+        this.arrow.src = "./assets/fighters/purple_arrow/projectile.png"
+
         this.offsetHeight = -5;
         this.offsetWidth = 20;
         
@@ -222,7 +223,6 @@ export class purple_arrow extends fighter {
         this.maxSpeed = 10
         this.jumpForce = 10
         
-        this.health = 100;
         
         this.maxFrameNum = 7
         this.frameNum = 0
@@ -235,36 +235,10 @@ export class purple_arrow extends fighter {
         this.moving = false;
         this.attacking = false;
         this.falling = false;
+        this.shielding = false;
+        this.volatile = false;
     }
-    
-    moveX(direction = 0) {
-        if (direction != 0){
-            this.direction = direction;
-        }
-        if(direction == 0) {
-            // Apply friction to slow the fighter in a sort of natural way
-            if(this.velocity[0] == 1 || this.velocity[0] == -1) this.velocity[0] = 0
-            if(this.velocity[0] > 0) this.velocity[0] -= friction
-            else if(this.velocity[0] < 0) this.velocity[0] += friction
-        }
-    
-        if (direction == 1 && this.velocity[0] < 0) this.velocity[0] = 0 
-        else if (direction == -1 && this.velocity[0] > 0) this.velocity[0] = 0
-    
-        this.velocity[0] += direction * 1;
-        
-        if(this.velocity[0] > this.maxSpeed && this.attacking != "ability2") this.velocity[0] = this.maxSpeed;
-        else if(this.velocity[0] < -this.maxSpeed && his.attacking != "ability2") this.velocity[0] = -this.maxSpeed;
-        
-        if(this.x + this.velocity[0] < 0) {
-            this.velocity[0] = 0
-            this.x = 0
-        }
-        else if(this.x + this.width + this.velocity[0] > cWidth) {
-            this.velocity[0] = 0
-            this.x = cWidth-this.width
-        }
-    }
+
 
     /**
      * Draw the fighter on the canvas
@@ -274,7 +248,7 @@ export class purple_arrow extends fighter {
     draw(ctx) {
         if((this.direction == -1 && this.animation!= 5) || (this.direction == 1 && this.animation == 5)) {
             //This all essentially flips the image
-    
+            
             //Translates to the images position
             ctx.translate(this.x,this.y);
             
@@ -290,27 +264,34 @@ export class purple_arrow extends fighter {
         }
         else if ((this.direction == 1 && this.animation!= 5) || (this.direction == -1 && this.animation == 5)) {
             ctx.drawImage(this.img, (this.frameNum-1)*this.spriteWidth, (this.animation-1)*this.spriteHeight, this.spriteWidth, this.spriteHeight, this.x-this.offsetWidth, this.y+this.offsetHeight, this.spriteWidth*this.scale, this.spriteHeight*this.scale);
-            console.log(!this.grounded && this.direction == -1)
+        }
+        if(this.shielding){
+            ctx.drawImage(SHIELD, this.x-this.offsetWidth/4, this.y-this.offsetHeight, this.width, this.height);
         }
     }
 
-    shield() {
-        this.velocity[0] = 0  
-    }
 
     ability1() {
+        if(this.attacking) return
         this.velocity[0] = 0
         this.attacking = "ability1"
+        this.frameNum = 1
         sleep(1000).then(() => {
             this.attacking = false
         })
     }
     
     ability2() {
+        if(this.attacking) return
         this.velocity[0] = this.velocity[0] * 1.5
         this.attacking = "ability2"
+        this.frameNum = 1
+        this.maxSpeed = 20
+        console.log(this.direction)
+        this.moveX(this.direction)
         sleep(1000).then(() => {
             this.attacking = false
+            this.maxSpeed = 10
         })
 
     }
@@ -323,7 +304,10 @@ export class purple_arrow extends fighter {
     }
 
     checkState() {
-        if(this.health > 0) this.alive = true
+        for (let i = 0; i < 4; i++) {
+            if(this.attacking == "ability2") this.moveX(this.direction)
+        }
+        if(this.damage > 99) this.volatile = true
 
     }
 

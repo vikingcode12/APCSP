@@ -30,6 +30,7 @@ function checkMovement(){
     else if (curkeys[74]) testChar.shield()
     else if(newkeys[75]) testChar.ability1()
     else if (newkeys[76]) testChar.ability2()
+    if (!curkeys[74]) testChar.shielding = false
 }
 
 function update() {
