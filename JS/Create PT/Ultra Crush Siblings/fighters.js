@@ -1,7 +1,7 @@
 import {sleep} from "./utility.js" 
 
 // Witch: https://9e0.itch.io/witches-pack
-// FIND CITATION FOR THE ARCHER SPRITE PLS
+// Archer: https://astrobob.itch.io/arcane-archer
 
 
 /** @type {HTMLCanvasElement} */ 
@@ -25,15 +25,57 @@ const SHIELD = new Image()
 SHIELD.src = "./assets/shield.png"
 
 class projectile {
-    constructor(img, x=0, y=0, sx=50, direction=1) {
+    /**
+     * 
+     * @param {HTMLImageElement} img 
+     * @param {Number} x 
+     * @param {Number} y 
+     * @param {Number} sx 
+     * @param {Number} direction 
+     */
+    constructor(img, x=-800, y=500, sx=50, direction=1) {
         this.img = img;
         this.x = x;
         this.y = y;
         this.speedX = sx;
-        this.dir = direction;
+        this.direction= direction;
     }
 
-    draw(){
+    /** 
+     * 
+     * @param {CanvasRenderingContext2D} ctx 
+     */
+    draw(ctx){
+        //No need to draw if it's off the screen
+        if(this.x + this.img.width < -200 || this.x > cWidth-this.img.width+200) return;
+
+        if(this.direction == -1) {
+            //This all essentially flips the image
+            
+            //Translates to the image position
+            ctx.translate(this.x,this.y);
+            
+            // scaleX by -1; flip horizontally
+            ctx.scale(-1,1);
+            
+            // draw the img
+            // no need for x,y since we've already translated
+            ctx.drawImage(this.img, 0, 0, this.img.width, this.img.height, -this.img.width, 0, this.img.width, this.img.height);
+            
+            // reset transformations to default
+            ctx.setTransform(1,0,0,1,0,0);
+        }
+        else {
+            ctx.drawImage(this.img, this.x, this.y, this.img.width, this.img.height);
+        }
+    }
+
+    update(){
+        if(this.x + this.img.width < 0 || this.x > cWidth-this.img.width) return;
+        this.x += this.speedX * this.direction
+    }
+
+    collision(obj) {
         
     }
 }
@@ -111,6 +153,7 @@ export class fighter {
         if(this.y == cHeight - ground - this.height) this.grounded = true
         else this.grounded = false
 
+        
     }
 
     /**
@@ -148,6 +191,24 @@ export class fighter {
         else {
             ctx.drawImage(this.img, (this.frameNum-1)*this.spriteWidth, (this.animation-1)*this.spriteHeight, this.spriteWidth, this.spriteHeight, this.x-this.offsetWidth, this.y+this.offsetHeight, this.spriteWidth*this.scale, this.spriteHeight*this.scale);
         }
+        
+    }
+
+    update() {
+        this.applyGravity()
+        this.gameFrame++
+
+
+        this.checkState()
+
+        this.animate()
+        
+        this.x += this.velocity[0];
+        this.y += this.velocity[1];
+        if(this.y == cHeight - ground - this.height) this.grounded = true
+        else this.grounded = false
+
+        this.arrow.update()
     }
 
     applyGravity(){
@@ -162,7 +223,7 @@ export class fighter {
     }
 
     shield() {
-        if(!this.grounded) return
+        if(!this.grounded || this.attacking) return
         this.velocity[0] = 0 
         this.shielding = true
     }
@@ -202,7 +263,7 @@ export class fighter {
     }
     
     jump() {
-        if(!this.grounded && !this.hasDoubleJump || this.shielding) return
+        if(!this.grounded && !this.hasDoubleJump || this.shielding || this.attacking) return
         if(this.hasDoubleJump && !this.grounded) this.hasDoubleJump = false
         this.velocity[1] = -this.jumpForce;
     }
@@ -213,8 +274,8 @@ export class purple_arrow extends fighter {
         super(src, spW, spH, x, y, width, height)
         this.scale = 1.5
         
-        this.arrow = new Image()
-        this.arrow.src = "./assets/fighters/purple_arrow/projectile.png"
+        this.arrow_img = new Image()
+        this.arrow_img.src = "./assets/fighters/purple_arrow/projectile.png"
 
         this.offsetHeight = -5;
         this.offsetWidth = 20;
@@ -237,6 +298,8 @@ export class purple_arrow extends fighter {
         this.falling = false;
         this.shielding = false;
         this.volatile = false;
+     
+        this.arrow = new projectile(this.arrow_img,)
     }
 
 
@@ -249,10 +312,10 @@ export class purple_arrow extends fighter {
         if((this.direction == -1 && this.animation!= 5) || (this.direction == 1 && this.animation == 5)) {
             //This all essentially flips the image
             
-            //Translates to the images position
+            //Translates to the image position
             ctx.translate(this.x,this.y);
             
-            // scaleX by -1; this "trick" flips horizontally
+            // scaleX by -1; flip horizontally
             ctx.scale(-1,1);
             
             // draw the img
@@ -268,6 +331,7 @@ export class purple_arrow extends fighter {
         if(this.shielding){
             ctx.drawImage(SHIELD, this.x-this.offsetWidth/4, this.y-this.offsetHeight, this.width, this.height);
         }
+        this.arrow.draw(ctx)
     }
 
 
@@ -276,7 +340,8 @@ export class purple_arrow extends fighter {
         this.velocity[0] = 0
         this.attacking = "ability1"
         this.frameNum = 1
-        sleep(1000).then(() => {
+        sleep(900).then(() => {
+            this.arrow = new projectile(this.arrow_img, this.x, this.y+this.height/2, 60, this.direction)
             this.attacking = false
         })
     }
@@ -307,6 +372,7 @@ export class purple_arrow extends fighter {
         for (let i = 0; i < 4; i++) {
             if(this.attacking == "ability2") this.moveX(this.direction)
         }
+        if(this.attacking == "ability1") this.velocity[0] = 0
         if(this.damage > 99) this.volatile = true
 
     }
