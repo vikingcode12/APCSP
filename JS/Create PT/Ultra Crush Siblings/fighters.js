@@ -2,6 +2,14 @@ import {sleep} from "./utility.js"
 
 // Witch: https://9e0.itch.io/witches-pack
 // Archer: https://astrobob.itch.io/arcane-archer
+// Warrior: https://creativekind.itch.io/nightborne-warrior
+
+function collides(enemy, range) {
+    if (range.x < enemy.x + enemy.width && range.x + range.width > enemy.x && range.y < enemy.y + enemy.height && range.y + range.height > enemy.y) {
+        return true;
+    }
+    return false;
+}
 
 
 /** @type {HTMLCanvasElement} */ 
@@ -47,7 +55,7 @@ class projectile {
      */
     draw(ctx){
         //No need to draw if it's off the screen
-        if(this.x + this.img.width < -200 || this.x > cWidth-this.img.width+200) return;
+        if(this.x + this.img.width < -200 || this.x > cWidth - this.img.width + 200) return;
 
         if(this.direction == -1) {
             //This all essentially flips the image
@@ -71,12 +79,8 @@ class projectile {
     }
 
     update(){
-        if(this.x + this.img.width < 0 || this.x > cWidth-this.img.width) return;
+        if(this.x + this.img.width < 0 || this.x > cWidth-this.img.width + 200) return;
         this.x += this.speedX * this.direction
-    }
-
-    collision(obj) {
-        
     }
 }
 
@@ -153,7 +157,6 @@ export class fighter {
         if(this.y == cHeight - ground - this.height) this.grounded = true
         else this.grounded = false
 
-        
     }
 
     /**
@@ -177,13 +180,12 @@ export class fighter {
     
             //Translates to the images position
             ctx.translate(this.x,this.y);
-            
             // scaleX by -1; this "trick" flips horizontally
             ctx.scale(-1,1);
             
             // draw the img
             // no need for x,y since we've already translated
-            ctx.drawImage(this.img, (this.frameNum-1)*this.spriteWidth, (this.animation-1)*this.spriteHeight, this.spriteWidth, this.spriteHeight, -this.spriteWidth*this.scale /*Compensates for flip */, 0, this.spriteWidth*this.scale, this.spriteHeight*this.scale);
+            ctx.drawImage(this.img, (this.frameNum-1)*this.spriteWidth, (this.animation-1)*this.spriteHeight, this.spriteWidth, this.spriteHeight, -this.spriteWidth /*Compensates for flip */, this.offsetHeight, this.spriteWidth*this.scale, this.spriteHeight*this.scale);
             
             // always clean up -- reset transformations to default
             ctx.setTransform(1,0,0,1,0,0);
@@ -191,24 +193,9 @@ export class fighter {
         else {
             ctx.drawImage(this.img, (this.frameNum-1)*this.spriteWidth, (this.animation-1)*this.spriteHeight, this.spriteWidth, this.spriteHeight, this.x-this.offsetWidth, this.y+this.offsetHeight, this.spriteWidth*this.scale, this.spriteHeight*this.scale);
         }
-        
-    }
-
-    update() {
-        this.applyGravity()
-        this.gameFrame++
-
-
-        this.checkState()
-
-        this.animate()
-        
-        this.x += this.velocity[0];
-        this.y += this.velocity[1];
-        if(this.y == cHeight - ground - this.height) this.grounded = true
-        else this.grounded = false
-
-        this.arrow.update()
+        if(this.shielding){
+            ctx.drawImage(SHIELD, this.x-this.offsetWidth/4, this.y-this.offsetHeight, this.width, this.height);
+        }
     }
 
     applyGravity(){
@@ -320,7 +307,7 @@ export class purple_arrow extends fighter {
             
             // draw the img
             // no need for x,y since we've already translated
-            ctx.drawImage(this.img, (this.frameNum-1)*this.spriteWidth, (this.animation-1)*this.spriteHeight, this.spriteWidth, this.spriteHeight, -this.spriteWidth*this.scale /*Compensates for flip */, 0, this.spriteWidth*this.scale, this.spriteHeight*this.scale);
+            ctx.drawImage(this.img, (this.frameNum-1)*this.spriteWidth, (this.animation-1)*this.spriteHeight, this.spriteWidth, this.spriteHeight, -this.spriteWidth*this.scale /*Compensates for flip */, this.offsetHeight, this.spriteWidth*this.scale, this.spriteHeight*this.scale);
             
             // always clean up -- reset transformations to default
             ctx.setTransform(1,0,0,1,0,0);
@@ -334,6 +321,22 @@ export class purple_arrow extends fighter {
         this.arrow.draw(ctx)
     }
 
+    update() {
+        this.applyGravity()
+        this.gameFrame++
+
+
+        this.checkState()
+
+        this.animate()
+        
+        this.x += this.velocity[0];
+        this.y += this.velocity[1];
+        if(this.y == cHeight - ground - this.height) this.grounded = true
+        else this.grounded = false
+
+        this.arrow.update()
+    }
 
     ability1() {
         if(this.attacking) return
@@ -352,7 +355,6 @@ export class purple_arrow extends fighter {
         this.attacking = "ability2"
         this.frameNum = 1
         this.maxSpeed = 20
-        console.log(this.direction)
         this.moveX(this.direction)
         sleep(1000).then(() => {
             this.attacking = false
@@ -361,12 +363,6 @@ export class purple_arrow extends fighter {
 
     }
 
-    collides(enemy, range) {
-        if (range.x < enemy.x + enemy.width && range.x + range.width > enemy.x && range.y < enemy.y + enemy.height && range.y + range.height > enemy.y) {
-            return true;
-        }
-        return false;
-    }
 
     checkState() {
         for (let i = 0; i < 4; i++) {
@@ -466,6 +462,163 @@ export class purple_arrow extends fighter {
             else{
              this.animation = 6
              this.maxFrameNum = 4;
+             if(this.frameNum > this.maxFrameNum) this.frameNum = 1
+             return;
+         }
+    }
+}
+
+export class warrior extends fighter {
+    constructor(src, spW=80, spH=80, x = cWidth/2, y = 0, width = 16, height = 9) {
+        super(src, spW, spH, x, y, width, height)
+        this.scale = 2
+
+        this.offsetHeight = -57;
+        this.offsetWidth = 40;
+        
+        
+        this.maxSpeed = 10
+        this.jumpForce = 10
+        
+        
+        this.maxFrameNum = 7
+        this.frameNum = 0
+        this.gameFrame = 0
+        
+        this.animation = 0
+        
+        this.alive = true;
+        this.hurt = false;
+        this.moving = false;
+        this.attacking = false;
+        this.falling = false;
+        this.shielding = false;
+        this.volatile = false;
+     
+    }
+
+
+    ability1() {
+        if(this.attacking) return
+        this.velocity[0] = 0
+        this.attacking = "ability1"
+        this.frameNum = 1
+        sleep(900).then(() => {
+            this.attacking = false
+        })
+    }
+    
+    ability2() {
+        if(this.attacking) return
+        this.velocity[0] = this.velocity[0] * 1.5
+        this.attacking = "ability2"
+        this.frameNum = 1
+        this.maxSpeed = 20
+        console.log(this.direction)
+        this.moveX(this.direction)
+        sleep(1000).then(() => {
+            this.attacking = false
+            this.maxSpeed = 10
+        })
+
+    }
+
+
+    checkState() {
+        for (let i = 0; i < 4; i++) {
+            if(this.attacking == "ability2") this.moveX(this.direction)
+        }
+        if(this.attacking == "ability1") this.velocity[0] = 0
+        if(this.damage > 99) this.volatile = true
+
+    }
+
+    // Code to manage current animation and animation frame.
+    // Author: Me
+    // Source: characters.js 
+    // Accessed on 2/16/23
+    animate(){
+         //Staggers the frames so the animations don't play too fast
+         if(this.gameFrame % staggerFrame != 0) return;
+         //Animates next frame if there is another frame otherwise start over from first frame
+         if(this.frameNum < this.maxFrameNum) this.frameNum++;
+         else{
+             //Checks if the character lost because then there is no need to update animations
+             if(!this.alive) return;
+             this.frameNum = 1
+         }
+         //Eveything below handles a majority of the animation logic
+ 
+         //Checks if the conditions are met runs the animation then returns otherwise 
+         if(this.health <= 0){
+             if(!this.alive) this.frameNum = 0;
+             this.animation = 2;
+             this.totalFrames = 8;
+             this.alive = false;
+             return
+         }
+         //Attacked Animations
+         else if(this.hurt){
+             this.totalFrames = 3;
+             this.animation = 15;
+             if(this.frameNum == this.totalFrames) this.hurt = false;
+             return
+         }
+         
+         if(this.attacking) {
+            if (this.attacking == "ability1") {
+                this.animation = 4
+                this.maxFrameNum = 7
+            }
+            else if (this.attacking == "ability2") {
+                this.animation = 3
+                this.maxFrameNum = 7
+                this.velocity[0] = this.velocity[0] * 1.5
+            }
+            if(this.frameNum == this.damageFrame){
+                if(this.isPlayer) this.attackLogicPlayer()
+                else this.attackLogicCPU()
+                if(this.currentAttack == 1) this.damageFrame = 5;
+            }
+            if(this.frameNum == this.totalFrames) {
+                if(this.currentAttack == 1) {
+                    util.sleep(400).then(() => {
+                        this.canAttack1 = true;
+                    })
+                }
+                else if(this.currentAttack == 2) {
+                    util.sleep(1700).then(() => {
+                        this.canAttack2 = true;
+                    })
+                }
+                    this.attacking = false;
+                    this.currentAttack = 0;
+             }
+             return;
+         }
+         
+         else if(!this.grounded){
+            let vx = this.velocity[0]
+            this.animation = 2
+            this.maxFrameNum = 6
+            if (vx == 0) {
+                this.animation = 1
+                this.maxFrameNum = 9
+            } 
+            if(this.frameNum > this.maxFrameNum) this.frameNum = 1
+            return
+         }
+         
+         else if(this.velocity[0] != 0){
+             this.animation = 2;
+             this.maxFrameNum = 6;
+             if(this.frameNum > this.maxFrameNum) this.frameNum = 1
+             return
+            }
+            
+            else{
+             this.animation = 1
+             this.maxFrameNum = 9;
              if(this.frameNum > this.maxFrameNum) this.frameNum = 1
              return;
          }
