@@ -23,7 +23,7 @@ const path = "./assets/fighters/";
 
 const gravity = 0.4;
 const friction = 3;
-const ground = 0;
+const ground = 120;
 
 
 const staggerFrame = 5;
@@ -109,6 +109,9 @@ export class fighter {
         
         this.offsetHeight = 0;
         this.offsetWidth = 20;
+
+        this.shieldOffsetX = 0;
+        this.offsetWidthY = 0;
         
         this.x = x;
         this.y = y;
@@ -185,7 +188,7 @@ export class fighter {
             
             // draw the img
             // no need for x,y since we've already translated
-            ctx.drawImage(this.img, (this.frameNum-1)*this.spriteWidth, (this.animation-1)*this.spriteHeight, this.spriteWidth, this.spriteHeight, -this.spriteWidth /*Compensates for flip */, this.offsetHeight, this.spriteWidth*this.scale, this.spriteHeight*this.scale);
+            ctx.drawImage(this.img, (this.frameNum-1)*this.spriteWidth, (this.animation-1)*this.spriteHeight, this.spriteWidth, this.spriteHeight, -this.spriteWidth-this.offsetWidth, this.offsetHeight, this.spriteWidth*this.scale, this.spriteHeight*this.scale);
             
             // always clean up -- reset transformations to default
             ctx.setTransform(1,0,0,1,0,0);
@@ -194,13 +197,17 @@ export class fighter {
             ctx.drawImage(this.img, (this.frameNum-1)*this.spriteWidth, (this.animation-1)*this.spriteHeight, this.spriteWidth, this.spriteHeight, this.x-this.offsetWidth, this.y+this.offsetHeight, this.spriteWidth*this.scale, this.spriteHeight*this.scale);
         }
         if(this.shielding){
-            ctx.drawImage(SHIELD, this.x-this.offsetWidth/4, this.y-this.offsetHeight, this.width, this.height);
+            ctx.drawImage(SHIELD, this.x-this.shieldOffsetX, this.y-this.shieldOffsetY, this.width, this.height);
         }
     }
 
     applyGravity(){
         if( this.y < cHeight-ground - this.height) this.velocity[1] += gravity;
         else {
+            if(this.x + this.velocity[0] < 0 || this.x + this.width + this.velocity[0] > cWidth) {
+                this.velocity[1] += gravity;
+                return
+            }
             if(this.velocity[1] > 0){
                 this.velocity[1] = 0;
                 this.y = cHeight - ground-this.height;
@@ -239,14 +246,7 @@ export class fighter {
         if(this.velocity[0] > this.maxSpeed) this.velocity[0] = this.maxSpeed;
         else if(this.velocity[0] < -this.maxSpeed) this.velocity[0] = -this.maxSpeed;
         
-        if(this.x + this.velocity[0] < 0) {
-            this.velocity[0] = 0
-            this.x = 0
-        }
-        else if(this.x + this.width + this.velocity[0] > cWidth) {
-            this.velocity[0] = 0
-            this.x = cWidth-this.width
-        }
+        
     }
     
     jump() {
@@ -268,7 +268,7 @@ export class purple_arrow extends fighter {
         this.offsetWidth = 20;
         
         
-        this.maxSpeed = 10
+        this.maxSpeed = 15
         this.jumpForce = 10
         
         
@@ -307,8 +307,8 @@ export class purple_arrow extends fighter {
             
             // draw the img
             // no need for x,y since we've already translated
-            ctx.drawImage(this.img, (this.frameNum-1)*this.spriteWidth, (this.animation-1)*this.spriteHeight, this.spriteWidth, this.spriteHeight, -this.spriteWidth*this.scale /*Compensates for flip */, this.offsetHeight, this.spriteWidth*this.scale, this.spriteHeight*this.scale);
-            
+            ctx.drawImage(this.img, (this.frameNum-1)*this.spriteWidth, (this.animation-1)*this.spriteHeight, this.spriteWidth, this.spriteHeight, -this.spriteWidth-this.offsetWidth, this.offsetHeight, this.spriteWidth*this.scale, this.spriteHeight*this.scale);
+
             // always clean up -- reset transformations to default
             ctx.setTransform(1,0,0,1,0,0);
         }
@@ -476,6 +476,8 @@ export class warrior extends fighter {
         this.offsetHeight = -57;
         this.offsetWidth = 40;
         
+        this.shieldOffsetX = 40;
+        this.shieldOffsetY = -57;
         
         this.maxSpeed = 10
         this.jumpForce = 10
@@ -503,7 +505,8 @@ export class warrior extends fighter {
         this.velocity[0] = 0
         this.attacking = "ability1"
         this.frameNum = 1
-        sleep(900).then(() => {
+        sleep(1400).then(() => {
+            console.log("done")
             this.attacking = false
         })
     }
@@ -516,9 +519,11 @@ export class warrior extends fighter {
         this.maxSpeed = 20
         console.log(this.direction)
         this.moveX(this.direction)
-        sleep(1000).then(() => {
-            this.attacking = false
+        sleep(500).then(() => {
+            this.attacking = "ability1"
+            this.frameNum = 10
             this.maxSpeed = 10
+            sleep(500).then(this.attacking = false)
         })
 
     }
@@ -567,8 +572,8 @@ export class warrior extends fighter {
          
          if(this.attacking) {
             if (this.attacking == "ability1") {
-                this.animation = 4
-                this.maxFrameNum = 7
+                this.animation = 3
+                this.maxFrameNum = 12
             }
             else if (this.attacking == "ability2") {
                 this.animation = 3

@@ -20,6 +20,9 @@ var newkeys = [];
 const testChar2 = new fighters.purple_arrow("purple_arrow/spritesheet.png")
 const testChar = new fighters.warrior("warrior/spritesheet.png")
 
+const bg = new Image() //   https://ansimuz.itch.io/bulkhead-walls-environment
+bg.src = "./assets/bulkhead-wallsx3.png"
+
 /**
  * Function that dictates movement of the player character based on user input
  */
@@ -52,7 +55,9 @@ function drawFrame(){
     // Clear the canvas each frame
     ctx.clearRect(0, 0, cWidth, cHeight);
 
-    // testChar2.drawHitboxes(ctx);
+    ctx.drawImage(bg, 0, 0, cWidth, cHeight)
+
+    // testChar.drawHitboxes(ctx);
     testChar.draw(ctx);
     testChar2.draw(ctx);
 
