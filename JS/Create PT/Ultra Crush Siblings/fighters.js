@@ -1,9 +1,16 @@
 import {sleep} from "./utility.js" 
+import {player, cpu} from "./index.js"
 
 // Witch: https://9e0.itch.io/witches-pack
 // Archer: https://astrobob.itch.io/arcane-archer
 // Warrior: https://creativekind.itch.io/nightborne-warrior
 
+/**
+ * 
+ * @param {*} enemy An object representing an enemy
+ * @param {*} range The range of the attack of the object of the attack such as a projectile
+ * @returns 
+ */
 function collides(enemy, range) {
     if (range.x < enemy.x + enemy.width && range.x + range.width > enemy.x && range.y < enemy.y + enemy.height && range.y + range.height > enemy.y) {
         return true;
@@ -41,10 +48,13 @@ class projectile {
      * @param {Number} sx 
      * @param {Number} direction 
      */
-    constructor(img, x=-800, y=500, sx=50, direction=1) {
+    constructor(img, isPlayer, x=-800, y=500, sx=80, direction=1) {
         this.img = img;
+        this.isPlayer = isPlayer
         this.x = x;
         this.y = y;
+        this.width = this.img.width
+        this.height = this.img.height
         this.speedX = sx;
         this.direction= direction;
     }
@@ -81,6 +91,14 @@ class projectile {
     update(){
         if(this.x + this.img.width < 0 || this.x > cWidth-this.img.width + 200) return;
         this.x += this.speedX * this.direction
+        if(this.isPlayer) {
+            if(collides(this, cpu)) {
+                this.x = -800
+                cpu.damage += 25
+                cpu.velocity[0] += 2*(1+cpu.damage*5/100)*this.direction
+                cpu.hurt = true
+            }
+        }
     }
 }
 
@@ -96,9 +114,17 @@ export class fighter {
      * @param {Number} width 
      * @param {Number} height 
      */
-    constructor(src, spW=64, spH=64, x = cWidth/2, y = 0, width = 15, height = 8.5) {
+    constructor(src, isPlayer=false, spW=64, spH=64, x = cWidth/2, y = 0, width = 15, height = 8.5) {
+        this.isPlayer = isPlayer;
 
         this.scale = 1.5
+
+        this.attackRange = {
+            x: this.x,
+            y: this.y,
+            width: 50,
+            height: this.height,
+        }
 
         this.img = new Image();
         if(Array.isArray(src)){
@@ -119,7 +145,7 @@ export class fighter {
         this.velocity = [0, 0] // [vx, vy]
         this.direction = 1;
         this.maxSpeed = 10
-        this.jumpForce = 10
+        this.jumpForce = 15
         this.grounded = false;
         this.hasDoubleJump = true
         
@@ -147,18 +173,27 @@ export class fighter {
 
 
     update() {
+        console.log(this.velocity[0])
         this.applyGravity()
+        if(!this.isPlayer) {
+
+            this.applyFriction()
+        }
         this.gameFrame++
 
-
+        
+        
+        
         this.checkState()
-
+        
         this.animate()
         
         this.x += this.velocity[0];
         this.y += this.velocity[1];
         if(this.y == cHeight - ground - this.height) this.grounded = true
         else this.grounded = false
+        this.attackRange.x = this.x + this.width
+        this.attackRange.y = this.y
 
     }
 
@@ -170,6 +205,8 @@ export class fighter {
     drawHitboxes(ctx) {
         ctx.fillStyle = "black";
         ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.fillStyle = "red";
+        ctx.fillRect(this.attackRange.x, this.attackRange.y, this.attackRange.width, this.attackRange.height);
     }
     
     /**
@@ -201,10 +238,25 @@ export class fighter {
         }
     }
 
+    applyFriction() {
+        if(this.velocity[0] !== 0) {
+            if(this.velocity[0] > 0) {
+                this.velocity[0] -= gravity
+            }
+            else if (this.velocity[0] < 0) {
+                this.velocity[0] += gravity
+            }
+            if(this.velocity[0] > -1 && this.velocity[0] < 1 && this.velocity[0] !== 0) {
+                this.velocity[0] = 0
+            }
+
+        }
+    }
+
     applyGravity(){
-        if( this.y < cHeight-ground - this.height) this.velocity[1] += gravity;
+        if( this.y < cHeight-ground - this.height || this.y > cHeight - ground) this.velocity[1] += gravity;
         else {
-            if(this.x + this.velocity[0] < 0 || this.x + this.width + this.velocity[0] > cWidth) {
+            if(this.x + this.width < 0 || this.x > cWidth) {
                 this.velocity[1] += gravity;
                 return
             }
@@ -257,8 +309,8 @@ export class fighter {
 }
 
 export class purple_arrow extends fighter {
-    constructor(src, spW=64, spH=64, x = cWidth/2, y = 0, width = 16, height = 9) {
-        super(src, spW, spH, x, y, width, height)
+    constructor(src, isPlayer=false, spW=64, spH=64, x = cWidth/2, y = 0, width = 16, height = 9) {
+        super(src, isPlayer, spW, spH, x, y, width, height)
         this.scale = 1.5
         
         this.arrow_img = new Image()
@@ -269,7 +321,6 @@ export class purple_arrow extends fighter {
         
         
         this.maxSpeed = 15
-        this.jumpForce = 10
         
         
         this.maxFrameNum = 7
@@ -286,7 +337,7 @@ export class purple_arrow extends fighter {
         this.shielding = false;
         this.volatile = false;
      
-        this.arrow = new projectile(this.arrow_img,)
+        this.arrow = new projectile(this.arrow_img, this.isPlayer)
     }
 
 
@@ -344,7 +395,7 @@ export class purple_arrow extends fighter {
         this.attacking = "ability1"
         this.frameNum = 1
         sleep(900).then(() => {
-            this.arrow = new projectile(this.arrow_img, this.x, this.y+this.height/2, 60, this.direction)
+            this.arrow = new projectile(this.arrow_img, this.isPlayer, this.x, this.y+this.height/2, 60, this.direction)
             this.attacking = false
         })
     }
@@ -469,15 +520,22 @@ export class purple_arrow extends fighter {
 }
 
 export class warrior extends fighter {
-    constructor(src, spW=80, spH=80, x = cWidth/2, y = 0, width = 16, height = 9) {
-        super(src, spW, spH, x, y, width, height)
+    constructor(src, isPlayer=false, spW=80, spH=80, x = cWidth/2, y = 0, width = 16, height = 9) {
+        super(src, isPlayer, spW, spH, x, y, width, height)
         this.scale = 2
 
-        this.offsetHeight = -57;
+        this.attackRange = {
+            x: this.x,
+            y: this.y,
+            width: 100,
+            height: this.height,
+        }
+
         this.offsetWidth = 40;
+        this.offsetHeight = -57;
         
-        this.shieldOffsetX = 40;
-        this.shieldOffsetY = -57;
+        this.shieldOffsetX = 0;
+        this.shieldOffsetY = -5;
         
         this.maxSpeed = 10
         this.jumpForce = 10
@@ -506,7 +564,6 @@ export class warrior extends fighter {
         this.attacking = "ability1"
         this.frameNum = 1
         sleep(1400).then(() => {
-            console.log("done")
             this.attacking = false
         })
     }
@@ -517,7 +574,6 @@ export class warrior extends fighter {
         this.attacking = "ability2"
         this.frameNum = 1
         this.maxSpeed = 20
-        console.log(this.direction)
         this.moveX(this.direction)
         sleep(500).then(() => {
             this.attacking = "ability1"
@@ -564,10 +620,11 @@ export class warrior extends fighter {
          }
          //Attacked Animations
          else if(this.hurt){
-             this.totalFrames = 3;
-             this.animation = 15;
-             if(this.frameNum == this.totalFrames) this.hurt = false;
-             return
+             this.maxFrameNum = 5;
+             this.animation = 4;
+             if (this.frameNum > this.maxFrameNum) this.frameNum = 1
+            if(this.frameNum == this.maxFrameNum) this.hurt = false;
+            return
          }
          
          if(this.attacking) {

@@ -17,8 +17,9 @@ const tps = 60
 var curkeys = []
 var newkeys = [];
 
-const testChar2 = new fighters.purple_arrow("purple_arrow/spritesheet.png")
-const testChar = new fighters.warrior("warrior/spritesheet.png")
+export const cpu = new fighters.purple_arrow("purple_arrow/spritesheet.png", true)
+export const player = new fighters.warrior("warrior/spritesheet.png", true)
+
 
 const bg = new Image() //   https://ansimuz.itch.io/bulkhead-walls-environment
 bg.src = "./assets/bulkhead-wallsx3.png"
@@ -27,20 +28,20 @@ bg.src = "./assets/bulkhead-wallsx3.png"
  * Function that dictates movement of the player character based on user input
  */
 function checkMovement(){
-    if(curkeys[65]) testChar.moveX(-1)    
-    else if(curkeys[68]) testChar.moveX(1)
-    else testChar.moveX(0) 
-    if(newkeys[32]) testChar.jump()
-    else if (curkeys[74]) testChar.shield()
-    else if(newkeys[75]) testChar.ability1()
-    else if (newkeys[76]) testChar.ability2()
-    if (!curkeys[74]) testChar.shielding = false
+    if(curkeys[65]) player.moveX(-1)    
+    else if(curkeys[68]) player.moveX(1)
+    if(newkeys[32]) player.jump()
+    else if (curkeys[74]) player.shield()
+    else if(newkeys[75]) player.ability1()
+    else if (newkeys[76]) player.ability2()
+    if (!curkeys[74]) player.shielding = false
 }
 
 function update() {
     checkMovement()
-    testChar.update()
-    testChar2.update()
+    player.update()
+    cpu.update()
+    // console.log(cpu.damage)
 
 
     for (let i = 0; i < newkeys.length; i++) {
@@ -57,9 +58,9 @@ function drawFrame(){
 
     ctx.drawImage(bg, 0, 0, cWidth, cHeight)
 
-    // testChar.drawHitboxes(ctx);
-    testChar.draw(ctx);
-    testChar2.draw(ctx);
+    player.drawHitboxes(ctx);
+    player.draw(ctx);
+    cpu.draw(ctx);
 
     requestAnimationFrame(drawFrame);
 }
@@ -73,12 +74,13 @@ function init() {
         newkeys[e.keyCode] = true;}})
         window.addEventListener('keyup', function(e){ curkeys[e.keyCode] = false;})
     
+
     ctx.imageSmoothingEnabled = false;
     ctx.webkitImageSmoothingEnabled = false;
 
 
 
-    console.log(c.width, c.height);
+    // console.log(c.width, c.height);
     update();
     drawFrame();
 }
