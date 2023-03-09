@@ -11,7 +11,7 @@ import {player, cpu} from "./index.js"
  * @param {*} range The range of the attack of the object of the attack such as a projectile
  * @returns 
  */
-function collides(enemy, range) {
+function collides(range, enemy) {
     if (range.x < enemy.x + enemy.width && range.x + range.width > enemy.x && range.y < enemy.y + enemy.height && range.y + range.height > enemy.y) {
         return true;
     }
@@ -29,7 +29,7 @@ const cHeight = c.offsetHeight;
 const path = "./assets/fighters/";
 
 const gravity = 0.4;
-const friction = 3;
+const friction = 5;
 const ground = 120;
 
 
@@ -92,7 +92,7 @@ class projectile {
         if(this.x + this.img.width < 0 || this.x > cWidth-this.img.width + 200) return;
         this.x += this.speedX * this.direction
         if(this.isPlayer) {
-            if(collides(this, cpu)) {
+            if(collides(cpu, this)) {
                 this.x = -800
                 cpu.damage += 25
                 cpu.velocity[0] += 2*(1+cpu.damage*5/100)*this.direction
@@ -122,7 +122,7 @@ export class fighter {
         this.attackRange = {
             x: this.x,
             y: this.y,
-            width: 50,
+            width: 20,
             height: this.height,
         }
 
@@ -173,7 +173,6 @@ export class fighter {
 
 
     update() {
-        console.log(this.velocity[0])
         this.applyGravity()
         if(!this.isPlayer) {
 
@@ -192,7 +191,13 @@ export class fighter {
         this.y += this.velocity[1];
         if(this.y == cHeight - ground - this.height) this.grounded = true
         else this.grounded = false
-        this.attackRange.x = this.x + this.width
+        
+        if (this.direction == 1) {
+            this.attackRange.x = this.x + this.width
+        }
+        else {
+            this.attackRange.x = this.x - this.attackRange.width
+        }
         this.attackRange.y = this.y
 
     }
@@ -376,6 +381,11 @@ export class purple_arrow extends fighter {
         this.applyGravity()
         this.gameFrame++
 
+        if(!this.isPlayer) {
+
+            this.applyFriction()
+        }
+
 
         this.checkState()
 
@@ -410,6 +420,7 @@ export class purple_arrow extends fighter {
         sleep(1000).then(() => {
             this.attacking = false
             this.maxSpeed = 10
+            this.moveX(this.direction)
         })
 
     }
@@ -441,18 +452,11 @@ export class purple_arrow extends fighter {
          //Eveything below handles a majority of the animation logic
  
          //Checks if the conditions are met runs the animation then returns otherwise 
-         if(this.health <= 0){
-             if(!this.alive) this.frameNum = 0;
-             this.animation = 2;
-             this.totalFrames = 8;
-             this.alive = false;
-             return
-         }
          //Attacked Animations
-         else if(this.hurt){
-             this.totalFrames = 3;
-             this.animation = 15;
-             if(this.frameNum == this.totalFrames) this.hurt = false;
+        if(this.hurt){
+             this.maxFrameNum = 2;
+             this.animation = 8;
+             if(this.frameNum == this.maxFrameNum) this.hurt = false;
              return
          }
          
@@ -466,25 +470,6 @@ export class purple_arrow extends fighter {
                 this.maxFrameNum = 7
                 this.velocity[0] = this.velocity[0] * 1.5
             }
-            if(this.frameNum == this.damageFrame){
-                if(this.isPlayer) this.attackLogicPlayer()
-                else this.attackLogicCPU()
-                if(this.currentAttack == 1) this.damageFrame = 5;
-            }
-            if(this.frameNum == this.totalFrames) {
-                if(this.currentAttack == 1) {
-                    util.sleep(400).then(() => {
-                        this.canAttack1 = true;
-                    })
-                }
-                else if(this.currentAttack == 2) {
-                    util.sleep(1700).then(() => {
-                        this.canAttack2 = true;
-                    })
-                }
-                    this.attacking = false;
-                    this.currentAttack = 0;
-             }
              return;
          }
          
@@ -527,7 +512,7 @@ export class warrior extends fighter {
         this.attackRange = {
             x: this.x,
             y: this.y,
-            width: 100,
+            width: 80,
             height: this.height,
         }
 
@@ -563,8 +548,14 @@ export class warrior extends fighter {
         this.velocity[0] = 0
         this.attacking = "ability1"
         this.frameNum = 1
-        sleep(1400).then(() => {
+        sleep(1500).then(() => {
             this.attacking = false
+            if (collides(cpu, this.attackRange)) {
+                cpu.damage += 80
+                cpu.velocity[0] += 2*(1+cpu.damage*5/100)*this.direction
+                cpu.frameNum = 1
+                cpu.hurt = true
+            }
         })
     }
     
@@ -579,7 +570,17 @@ export class warrior extends fighter {
             this.attacking = "ability1"
             this.frameNum = 10
             this.maxSpeed = 10
-            sleep(500).then(this.attacking = false)
+            sleep(150).then(
+                () => {
+                    if (collides(cpu, this.attackRange)) {
+                        cpu.damage += 60
+                        cpu.velocity[0] += 2*(1+cpu.damage*5/100)*this.direction
+                        cpu.frameNum = 1
+                        cpu.hurt = true
+                    }
+                    this.attacking = false
+                    this.moveX(this.direction)
+                })
         })
 
     }
@@ -620,9 +621,9 @@ export class warrior extends fighter {
          }
          //Attacked Animations
          else if(this.hurt){
-             this.maxFrameNum = 5;
-             this.animation = 4;
-             if (this.frameNum > this.maxFrameNum) this.frameNum = 1
+            this.maxFrameNum = 5;
+            this.animation = 4;
+            if (this.frameNum > this.maxFrameNum) this.frameNum = 1
             if(this.frameNum == this.maxFrameNum) this.hurt = false;
             return
          }

@@ -17,7 +17,7 @@ const tps = 60
 var curkeys = []
 var newkeys = [];
 
-export const cpu = new fighters.purple_arrow("purple_arrow/spritesheet.png", true)
+export const cpu = new fighters.purple_arrow("purple_arrow/spritesheet.png", false)
 export const player = new fighters.warrior("warrior/spritesheet.png", true)
 
 
@@ -30,6 +30,7 @@ bg.src = "./assets/bulkhead-wallsx3.png"
 function checkMovement(){
     if(curkeys[65]) player.moveX(-1)    
     else if(curkeys[68]) player.moveX(1)
+    else player.applyFriction()
     if(newkeys[32]) player.jump()
     else if (curkeys[74]) player.shield()
     else if(newkeys[75]) player.ability1()
@@ -58,7 +59,6 @@ function drawFrame(){
 
     ctx.drawImage(bg, 0, 0, cWidth, cHeight)
 
-    player.drawHitboxes(ctx);
     player.draw(ctx);
     cpu.draw(ctx);
 
@@ -72,7 +72,11 @@ function init() {
     window.addEventListener('keydown', function(e){ if(!curkeys[e.keyCode]){
         curkeys[e.keyCode] = true; 
         newkeys[e.keyCode] = true;}})
-        window.addEventListener('keyup', function(e){ curkeys[e.keyCode] = false;})
+        window.addEventListener('keyup', function(e){ curkeys[e.keyCode] = false;
+            if (e.keyCode == 65 || e.keyCode == 68) {
+                player.velocity[0] = 0;
+            }
+        })
     
 
     ctx.imageSmoothingEnabled = false;
