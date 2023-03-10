@@ -92,7 +92,7 @@ class projectile {
         if(this.x + this.img.width < 0 || this.x > cWidth-this.img.width + 200) return;
         this.x += this.speedX * this.direction
         if(this.isPlayer) {
-            if(collides(cpu, this)) {
+            if(collides(cpu, this) && !cpu.shielding) {
                 this.x = -800
                 cpu.damage += 25
                 cpu.velocity[0] += 2*(1+cpu.damage*5/100)*this.direction
@@ -553,7 +553,7 @@ export class warrior extends fighter {
         this.frameNum = 1
         sleep(1500).then(() => {
             this.attacking = false
-            if (collides(cpu, this.attackRange)) {
+            if (collides(cpu, this.attackRange) && !cpu.shielding) {
                 cpu.damage += 80
                 cpu.velocity[0] += 2*(1+cpu.damage*5/100)*this.direction
                 cpu.frameNum = 1
@@ -575,7 +575,7 @@ export class warrior extends fighter {
             this.maxSpeed = 10
             sleep(150).then(
                 () => {
-                    if (collides(cpu, this.attackRange)) {
+                    if (collides(cpu, this.attackRange) && !cpu.shielding) {
                         cpu.damage += 60
                         cpu.velocity[0] += 2*(1+cpu.damage*5/100)*this.direction
                         cpu.frameNum = 1
