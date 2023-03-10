@@ -148,6 +148,8 @@ export class fighter {
         this.jumpForce = 15
         this.grounded = false;
         this.hasDoubleJump = true
+
+        this.lives = 3
         
         this.width = cWidth/width;
         this.height = cHeight/height;
@@ -430,6 +432,7 @@ export class purple_arrow extends fighter {
         for (let i = 0; i < 4; i++) {
             if(this.attacking == "ability2") this.moveX(this.direction)
         }
+        if(this.x < -200 || this.x > cWidth + 200 || this.y > cWidth + 200 || this.y < -200) this.alive = false
         if(this.attacking == "ability1") this.velocity[0] = 0
         if(this.damage > 99) this.volatile = true
 
@@ -590,6 +593,7 @@ export class warrior extends fighter {
         for (let i = 0; i < 4; i++) {
             if(this.attacking == "ability2") this.moveX(this.direction)
         }
+        if(this.x < -200 || this.x > cWidth + 200 || this.y > cWidth + 200 || this.y < -200) this.alive = false
         if(this.attacking == "ability1") this.velocity[0] = 0
         if(this.damage > 99) this.volatile = true
 
