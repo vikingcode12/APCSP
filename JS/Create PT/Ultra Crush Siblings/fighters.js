@@ -99,6 +99,14 @@ class projectile {
                 cpu.hurt = true
             }
         }
+        else {
+            if(collides(player, this) && !player.shielding) {
+                this.x = -800
+                player.damage += 25
+                player.velocity[0] += 2*(1+player.damage*5/100)*this.direction
+                player.hurt = true
+            }
+        }
     }
 }
 
@@ -287,6 +295,7 @@ export class fighter {
      * @param {Number} direction 1, -1 or 0
      */
     moveX(direction = 0) {
+        if(this.hurt) return
         if (direction != 0){
             this.direction = direction;
         }
@@ -402,7 +411,7 @@ export class purple_arrow extends fighter {
     }
 
     ability1() {
-        if(this.attacking) return
+        if(this.attacking || this.hurt) return
         this.velocity[0] = 0
         this.attacking = "ability1"
         this.frameNum = 1
@@ -413,7 +422,7 @@ export class purple_arrow extends fighter {
     }
     
     ability2() {
-        if(this.attacking) return
+        if(this.attacking || this.hurt) return
         this.velocity[0] = this.velocity[0] * 1.5
         this.attacking = "ability2"
         this.frameNum = 1
@@ -433,7 +442,6 @@ export class purple_arrow extends fighter {
             if(this.attacking == "ability2") this.moveX(this.direction)
         }
         if(this.x < -200 || this.x > cWidth + 200 || this.y > cWidth + 200 || this.y < -200) this.alive = false
-        if(this.attacking == "ability1") this.velocity[0] = 0
         if(this.damage > 99) this.volatile = true
 
     }
@@ -547,23 +555,23 @@ export class warrior extends fighter {
 
 
     ability1() {
-        if(this.attacking) return
+        if(this.attacking || this.hurt) return
         this.velocity[0] = 0
         this.attacking = "ability1"
         this.frameNum = 1
         sleep(1500).then(() => {
             this.attacking = false
             if (collides(cpu, this.attackRange) && !cpu.shielding) {
+                cpu.hurt = true
                 cpu.damage += 80
                 cpu.velocity[0] += 2*(1+cpu.damage*5/100)*this.direction
                 cpu.frameNum = 1
-                cpu.hurt = true
             }
         })
     }
     
     ability2() {
-        if(this.attacking) return
+        if(this.attacking || this.hurt) return
         this.velocity[0] = this.velocity[0] * 1.5
         this.attacking = "ability2"
         this.frameNum = 1
@@ -594,7 +602,6 @@ export class warrior extends fighter {
             if(this.attacking == "ability2") this.moveX(this.direction)
         }
         if(this.x < -200 || this.x > cWidth + 200 || this.y > cWidth + 200 || this.y < -200) this.alive = false
-        if(this.attacking == "ability1") this.velocity[0] = 0
         if(this.damage > 99) this.volatile = true
 
     }

@@ -54,6 +54,8 @@ function formatText(text) {
  * Function that dictates movement of the player character based on user input given through currkeys array and newkeys array
  */
 function checkMovement(){
+    if(player.attacking) return
+    console.log(player.attacking)
     if(curkeys[65]) player.moveX(-1)    
     else if(curkeys[68]) player.moveX(1)
     else player.applyFriction()
@@ -68,6 +70,7 @@ function checkMovement(){
  * Function that updates the game state
  */
 function update() {
+    if(!cpu.attacking) cpu.ability1() 
     checkMovement()
     player.update()
     if (!player.alive && player.lives-1 > 0) {
@@ -77,7 +80,7 @@ function update() {
     }
     else if (!player.alive) player.lives = 0
 
-    if (!cpu.alive && player.lives-1 > 0) {
+    if (!cpu.alive && cpu.lives-1 > 0) {
         cpu = new fighters.purple_arrow("purple_arrow/spritesheet.png", false)
         cLives -= 1;
         cpu.lives = cLives;
@@ -106,11 +109,11 @@ function drawFrame(){
     player.draw(ctx);
     cpu.draw(ctx);
 
-    if(!cpu.alive && cpu.lives-1 <= 0 ) {
+    if(!cpu.alive && cpu.lives-1 < 0 ) {
         drawText("you win")
     }
 
-    if(!player.alive && player.lives-1 <= 0) {
+    if(!player.alive && player.lives-1 < 0) {
         drawText("you lose")
     }
 

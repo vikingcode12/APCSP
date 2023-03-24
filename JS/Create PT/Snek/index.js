@@ -5,12 +5,15 @@ const c = myCanvas;
 const cWidth = c.offsetWidth; 
 const cHeight = c.offsetHeight; 
 const ctx = c.getContext("2d");
+
+const tile = 50
 // Control how often the game updates so there won't be an issue on high refresh rate monitors
 const fps = 60 
 
 function update() {
 
     setTimeout(() => {
+        
         update();
     }, 1000 / tps);
 }
@@ -21,5 +24,7 @@ function drawFrame(){
     requestAnimationFrame(drawFrame);
 }
 
-update();
-drawFrame();
+function init() {
+    update();
+    drawFrame();
+}
