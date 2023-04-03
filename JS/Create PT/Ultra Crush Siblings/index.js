@@ -42,8 +42,6 @@ var cLives = 3;
 
 var state = "title"
 
-var cpuLvl = 1
-
 const bg = new Image() 
 // Image of a platformer stage
 // Source: https://ansimuz.itch.io/bulkhead-walls-environment\
@@ -52,13 +50,15 @@ bg.src = "./assets/bulkhead-wallsx3.png"
 
 var titleOptionNum = 0
 var titleOptionArr = [{ 
-    number: 1, // Start
+    text: "start",
+    state: "char_select",
     arrowOffset: -120,
     height: -45,
 }, 
 {
-    number: 2, // Instructions
-    arrowOffset: -220,
+    text: "instructions", 
+    state: "instructions",
+    arrowOffset: -220,  
     height: +65,
 }]
 
@@ -174,8 +174,7 @@ function updateTitleScreen() {
     else if(newkeys[13]) {
         //Delay so you don't choose an option right when the state is changed
         sleep(20).then(() =>{
-            if(titleOptionArr[titleOptionNum].number == 1) state = "char_select"
-            else if(titleOptionArr[titleOptionNum].number == 2) state = "instructions"
+            state = titleOptionArr[titleOptionNum].state
         })
     }
 }
@@ -317,10 +316,11 @@ function drawTitleScreen() {
     ctx.drawImage(bg, 0, 0, cWidth, cHeight);
     
     drawText('Ultra Crush', cWidth/2, cHeight/2-250, 60)
-    drawText('Siblings', cWidth/2, cHeight/2-150, 60)
+        drawText('Siblings', cWidth/2, cHeight/2-150, 60)
     drawText('>', cWidth/2+titleOptionArr[titleOptionNum].arrowOffset, cHeight/2+titleOptionArr[titleOptionNum].height, 70)
-    drawText('start', cWidth/2, cHeight/2-45, 45)
-    drawText('how to play', cWidth/2, cHeight/2+65, 45)
+    for (let i = 0; i < titleOptionArr.length; i++) {
+        drawText(titleOptionArr[i].text, cWidth/2, cHeight/2+titleOptionArr[i].height, 45)
+    }
     drawText('Use  arrow  keys  to  move  and  enter  to  select', cWidth/2, cHeight/2+290, 17)
 }
 
