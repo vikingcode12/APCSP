@@ -101,7 +101,7 @@ class projectile {
             if(collides(cpu, this) && !cpu.shielding) {
                 this.x = -800
                 cpu.damage += 25
-                cpu.velocity[0] += 2*(1+cpu.damage*5/100)*this.direction
+                cpu.velocity[0] += 5*(1+cpu.damage*20/100)*this.direction
                 cpu.frameNum = 1
                 cpu.hurt = true
                 sleep(1000).then(() => {
@@ -115,7 +115,7 @@ class projectile {
             if(collides(player, this) && !player.shielding) {
                 this.x = -800
                 player.damage += 25
-                player.velocity[0] += 2*(1+player.damage*5/100)*this.direction
+                player.velocity[0] += 2*(1+player.damage*20/100)*this.direction
                 player.frameNum = 1
                 player.hurt = true
                 sleep(1000).then(() => {
@@ -505,6 +505,7 @@ export class purple_arrow extends fighter {
     // Author: Me
     // Source: characters.js 
     // Accessed on 2/16/23
+    // Written on 4/25/22
     animate(){
          //Staggers the frames so the animations don't play too fast
          if(this.gameFrame % staggerFrame != 0) return;
@@ -627,7 +628,7 @@ export class warrior extends fighter {
                 if (collides(cpu, this.attackRange) && !cpu.shielding) {
                     cpu.hurt = true
                     cpu.damage += 80
-                    cpu.velocity[0] += 2*(1+cpu.damage*5/100)*this.direction
+                    cpu.velocity[0] += 2*(1+cpu.damage*20/100)*this.direction
                     cpu.frameNum = 1
                     sleep(1000).then(() => {
                         cpu.hurt = false
@@ -640,7 +641,7 @@ export class warrior extends fighter {
                 if (collides(player, this.attackRange) && !player.shielding) {
                     player.hurt = true
                     player.damage += 80
-                    player.velocity[0] += 2*(1+player.damage*5/100)*this.direction
+                    player.velocity[0] += 2*(1+player.damage*20/100)*this.direction
                     player.frameNum = 1
                     sleep(1000).then(() => {
                         player.hurt = false
@@ -673,7 +674,7 @@ export class warrior extends fighter {
                     // Checks for collision then applies damage if collided
                     if (collides(cpu, this.attackRange) && !cpu.shielding) {
                         cpu.damage += 60
-                        cpu.velocity[0] += 2*(1+cpu.damage*5/100)*this.direction
+                        cpu.velocity[0] += 2*(1+cpu.damage*20/100)*this.direction
                         cpu.frameNum = 1
                         cpu.hurt = true
                         sleep(1000).then(() => {
@@ -684,7 +685,7 @@ export class warrior extends fighter {
                     else if (collides(player, this.attackRange) && !player.shielding) {
                         player.hurt = true
                         player.damage += 80
-                        player.velocity[0] += 2*(1+player.damage*5/100)*this.direction
+                        player.velocity[0] += 2*(1+player.damage*20/100)*this.direction
                         player.frameNum = 1
                         sleep(1000).then(() => {
                             player.hurt = false
@@ -716,6 +717,7 @@ export class warrior extends fighter {
     // Author: Me
     // Source: characters.js 
     // Accessed on 2/16/23
+    // Written on 4/25/22
     animate(){
          //Staggers the frames so the animations don't play too fast
          if(this.gameFrame % staggerFrame != 0) return;

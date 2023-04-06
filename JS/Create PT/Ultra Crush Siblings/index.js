@@ -321,7 +321,7 @@ function drawTitleScreen() {
     for (let i = 0; i < titleOptionArr.length; i++) {
         drawText(titleOptionArr[i].text, cWidth/2, cHeight/2+titleOptionArr[i].height, 45)
     }
-    drawText('Use  arrow  keys  to  move  and  enter  to  select', cWidth/2, cHeight/2+290, 17)
+    drawText('Use arrow keys to move and enter to  select', cWidth/2, cHeight/2+290, 17)
 }
 
 /**
